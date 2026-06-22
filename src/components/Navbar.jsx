@@ -57,8 +57,8 @@ const Navbar = () => {
 
             {user && (
               <Link
-                href={`/dashboard/${user.role}`}
-                className={getLinkClass(`/dashboard/${user.role}`)}
+                href={user.role === "admin" ? "/dashboard/admin" : "/dashboard"}
+                className={getLinkClass(user.role === "admin" ? "/dashboard/admin" : "/dashboard")}
               >
                 Dashboard
               </Link>
@@ -123,8 +123,8 @@ const Navbar = () => {
 
               {user && (
                 <Link
-                  href={`/dashboard/${user.role}`}
-                  className={getLinkClass(`/dashboard/${user.role}`)}
+                  href={user.role === "admin" ? "/dashboard/admin" : "/dashboard"}
+                  className={getLinkClass(user.role === "admin" ? "/dashboard/admin" : "/dashboard")}
                   onClick={() => setOpen(false)}
                 >
                   Dashboard

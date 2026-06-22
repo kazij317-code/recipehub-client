@@ -4,6 +4,7 @@ import { CheckCircle } from "lucide-react";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
+import SuccessClient from "./SuccessClient";
 
 const SuccessPage = async ({ searchParams }) => {
   const resolvedSearchParams = await searchParams;
@@ -83,6 +84,7 @@ const SuccessPage = async ({ searchParams }) => {
 
   return (
     <div className="py-10 px-4 md:px-10">
+      <SuccessClient />
       <div className="max-w-3xl mx-auto text-center">
         <div className="mb-6">
           <div className="mx-auto mb-4 h-24 w-24 rounded-full bg-emerald-100 flex items-center justify-center">

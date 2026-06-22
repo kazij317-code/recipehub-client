@@ -53,7 +53,7 @@ const DropdownButton = ({ user }) => {
         <Dropdown.Menu>
           <Dropdown.Item
             className="w-full flex items-center gap-2"
-            onAction={() => router.push(`/dashboard/${user.role}`)}
+            onAction={() => router.push(user.role === "admin" ? "/dashboard/admin" : "/dashboard")}
           >
             <User size={16} className="text-gray-500" />
             Dashboard
