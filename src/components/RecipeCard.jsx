@@ -3,8 +3,12 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import RecipeCardActions from "@/components/RecipeCardActions";
+import { useSession } from "@/lib/auth-client";
 
 const RecipeCard = ({ recipe, isOwner = false }) => {
+  const { data } = useSession();
+  const isLoggedIn = !!data?.user;
+
   const authorName = recipe.userEmail
     ? recipe.userEmail.split("@")[0]
     : "Anonymous";
@@ -23,9 +27,13 @@ const RecipeCard = ({ recipe, isOwner = false }) => {
     return null;
   }
 
+  const detailUrl = isLoggedIn
+    ? `/browse-recipes/${recipeId}`
+    : `/login?redirectTo=/browse-recipes/${recipeId}`;
+
   return (
     <div className="group overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-950">
-      <Link href={`/browse-recipes/${recipeId}`} className="relative block overflow-hidden">
+      <Link href={detailUrl} className="relative block overflow-hidden">
         <img
           src={recipe.recipeImage || "/placeholder.jpg"}
           alt={recipe.recipeName}
@@ -62,7 +70,7 @@ const RecipeCard = ({ recipe, isOwner = false }) => {
           <span>{authorName}</span>
           <div className="flex items-center gap-2">
             <Link
-              href={`/browse-recipes/${recipeId}`}
+              href={detailUrl}
               className="font-medium text-cyan-600 hover:text-cyan-500 dark:text-cyan-300"
             >
               View

@@ -5,12 +5,16 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import GoogleLogin from "@/components/GoogleLogin";
+
 const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || searchParams.get("callbackUrl") || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +52,7 @@ const LoginPage = () => {
 
       if (data) {
         toast.success("Login successfully");
-        router.push("/");
+        window.location.href = redirectTo;
       }
 
       if (error) {
@@ -160,14 +164,7 @@ const LoginPage = () => {
 
         {/* Google Login */}
 
-        <button className="w-full border border-gray-300 dark:border-gray-600 py-3 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-100 dark:hover:bg-[#1f2937] transition-all duration-300 text-gray-700 dark:text-white font-medium">
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            alt="google"
-            className="w-5 h-5"
-          />
-          Continue with Google
-        </button>
+        <GoogleLogin />
 
         {/* Register Redirect */}
 

@@ -8,7 +8,7 @@ import { Button } from '@heroui/react';
 
 const GoogleLogin = () => {
     const searchParams = useSearchParams();
-    const callbackURL = searchParams.get("callbackUrl") || "/";
+    const callbackURL = searchParams.get("callbackUrl") || searchParams.get("redirectTo") || "/";
 
     const handleGoogleSignin = async () => {
         const data = await authClient.signIn.social({
