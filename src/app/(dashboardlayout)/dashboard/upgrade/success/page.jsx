@@ -53,7 +53,28 @@ const SuccessPage = async ({ searchParams }) => {
             },
           }
         );
-        console.log(`[SUCCESS] Upgraded user ${session.user.email} to premium`);
+
+        // Record the premium upgrade transaction
+        const purchasesCollection = db.collection("purchases");
+        await purchasesCollection.updateOne(
+          {
+            userEmail: session.user.email,
+            paymentType: "premium_upgrade",
+            sessionId: sessionId,
+          },
+          {
+            $set: {
+              userId: session.user.id,
+              userEmail: session.user.email,
+              paymentType: "premium_upgrade",
+              sessionId: sessionId,
+              amount: "$9.99",
+              createdAt: new Date(),
+            },
+          },
+          { upsert: true }
+        );
+        console.log(`[SUCCESS] Upgraded user ${session.user.email} to premium and logged transaction.`);
       }
     } catch (error) {
       console.error("[SUCCESS] Failed database operation on success:", error);
