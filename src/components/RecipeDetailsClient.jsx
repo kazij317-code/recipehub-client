@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Heart, Star, Lock } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import { likeRecipe, saveFavorite } from "@/lib/actions/recipe";
+import { likeRecipe, saveFavorite, fetchUserFavorites } from "@/lib/actions/recipe";
 import { createRecipeCheckoutAction } from "@/lib/actions/checkout";
 import toast from "react-hot-toast";
 
@@ -21,6 +21,7 @@ const RecipeDetailsClient = ({ fallbackId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [purchaseLoading, setPurchaseLoading] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const requestUrl = useMemo(() => {
     if (!recipeId) return null;
@@ -64,6 +65,25 @@ const RecipeDetailsClient = ({ fallbackId }) => {
 
     return () => controller.abort();
   }, [requestUrl]);
+
+  useEffect(() => {
+    if (!user?.email || !recipeId) return;
+
+    const checkFavoriteStatus = async () => {
+      try {
+        const response = await fetchUserFavorites(user.email);
+        const savedList = response?.data || [];
+        const found = savedList.some(
+          (fav) => String(fav.recipeId) === String(recipeId)
+        );
+        setIsSaved(found);
+      } catch (err) {
+        console.error("Error checking favorite status:", err);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [user, recipeId]);
 
   if (!recipeId) {
     return (
@@ -141,6 +161,7 @@ const RecipeDetailsClient = ({ fallbackId }) => {
 
     try {
       const response = await saveFavorite(user.email, recipeId);
+      setIsSaved(true);
       toast.success(response?.message || "Saved to favorites");
     } catch (error) {
       toast.error(error?.message || "Failed to save favorite");
@@ -278,11 +299,12 @@ const RecipeDetailsClient = ({ fallbackId }) => {
               </button>
               <button
                 onClick={handleSaveFavorite}
-                className="w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-left text-slate-900 transition hover:bg-slate-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-slate-100"
+                disabled={isSaved}
+                className="w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-left text-slate-900 transition hover:bg-slate-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-slate-100 disabled:opacity-75"
               >
                 <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4" />
-                  Save to Favorites
+                  <Star className={`h-4 w-4 ${isSaved ? "fill-amber-400 text-amber-400" : ""}`} />
+                  {isSaved ? "Saved" : "Save to Favorites"}
                 </div>
               </button>
               {recipe.isLocked && (

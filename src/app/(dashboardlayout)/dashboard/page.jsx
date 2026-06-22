@@ -78,7 +78,7 @@ const DashboardPage = async () => {
             {savedFavorites}
           </p>
           <Link
-            href="/dashboard/profile"
+            href="/dashboard/favorites"
             className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
           >
             View details <ArrowRight className="h-4 w-4" />
@@ -149,7 +149,7 @@ const DashboardPage = async () => {
             Browse gallery
           </Link>
           <Link
-            href="#"
+            href="/dashboard/favorites"
             className="rounded-full border border-slate-200 bg-white px-6 py-3 text-center font-semibold text-slate-900 transition hover:bg-slate-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
           >
             View saved items
