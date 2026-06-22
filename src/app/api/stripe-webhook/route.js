@@ -78,11 +78,33 @@ export async function POST(request) {
           }
         );
 
-        console.log(`User ${userEmail || userId} upgraded to premium`);
+        // Record the transaction
+        const purchasesCollection = db.collection("purchases");
+        const resolvedEmail = userEmail || (await usersCollection.findOne(query))?.email;
+        await purchasesCollection.updateOne(
+          {
+            userEmail: resolvedEmail,
+            paymentType: "premium_upgrade",
+            sessionId: session.id,
+          },
+          {
+            $set: {
+              userId: userId,
+              userEmail: resolvedEmail,
+              paymentType: "premium_upgrade",
+              sessionId: session.id,
+              amount: "$9.99",
+              createdAt: new Date(),
+            },
+          },
+          { upsert: true }
+        );
+
+        console.log(`User ${resolvedEmail || userId} upgraded to premium and transaction logged`);
       } catch (error) {
-        console.error("Failed to update user plan:", error);
+        console.error("Failed to update user plan or record transaction:", error);
         return NextResponse.json(
-          { message: "Failed to update user" },
+          { message: "Failed to update user or record transaction" },
           { status: 500 }
         );
       }

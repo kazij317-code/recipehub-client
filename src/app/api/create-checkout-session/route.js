@@ -46,6 +46,7 @@ export async function POST(request) {
       metadata: {
         userId: session.user.id,
         userEmail: session.user.email,
+        paymentType: "premium_upgrade",
       },
     });
 

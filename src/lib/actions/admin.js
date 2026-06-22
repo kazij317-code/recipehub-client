@@ -65,9 +65,9 @@ const seedMockDataIfNeeded = async (db) => {
     }
   }
 
-  // 4. Seed transactions if empty
-  const purchasesCount = await db.collection("purchases").countDocuments();
-  if (purchasesCount === 0) {
+  // 4. Seed transactions if empty or missing premium upgrades
+  const premiumCount = await db.collection("purchases").countDocuments({ paymentType: "premium_upgrade" });
+  if (premiumCount === 0) {
     const mockPurchases = [
       { userEmail: "a@gmail.com", paymentType: "premium_upgrade", amount: "$9.99", sessionId: "cs_test_a1GRXySl...", createdAt: new Date("2026-06-16T10:00:00Z") },
       { userEmail: "a@gmail.com", paymentType: "recipe_purchase", amount: "$4.99", sessionId: "cs_test_a1xw8HiR...", createdAt: new Date("2026-06-16T10:00:00Z") },
@@ -75,13 +75,19 @@ const seedMockDataIfNeeded = async (db) => {
       { userEmail: "a@gmail.com", paymentType: "recipe_purchase", amount: "$4.99", sessionId: "cs_test_a1RHz2o2...", createdAt: new Date("2026-06-14T10:00:00Z") },
       { userEmail: "a@b.com", paymentType: "recipe_purchase", amount: "$4.99", sessionId: "cs_test_a10swNF1...", createdAt: new Date("2026-06-14T10:00:00Z") },
       { userEmail: "a@b.com", paymentType: "recipe_purchase", amount: "$4.99", sessionId: "test_txn_1781447...", createdAt: new Date("2026-06-14T10:00:00Z") },
-      { userEmail: "a@b.com", paymentType: "recipe_purchase", amount: "$4.99", sessionId: "test_txn_1781447...", createdAt: new Date("2026-06-14T10:00:00Z") },
+      { userEmail: "a@b.com", paymentType: "recipe_purchase", amount: "$4.99", sessionId: "test_txn_1781448...", createdAt: new Date("2026-06-14T10:00:00Z") },
       { userEmail: "a@b.com", paymentType: "premium_upgrade", amount: "$9.99", sessionId: "test_txn_premium...", createdAt: new Date("2026-06-14T10:00:00Z") },
       { userEmail: "nusrat.jahan@gmail.com", paymentType: "recipe_purchase", amount: "$0.02", sessionId: "pi_3Rq8HiLhY7A1B...", createdAt: new Date("2026-04-10T10:00:00Z") },
       { userEmail: "ayesha.rahman@gmail.com", paymentType: "recipe_purchase", amount: "$0.04", sessionId: "pi_3Rq8GhLhY7A1B...", createdAt: new Date("2026-04-09T10:00:00Z") },
       { userEmail: "mehedi.hasan@gmail.com", paymentType: "recipe_purchase", amount: "$0.03", sessionId: "pi_3Rq8FgLhY7A1B...", createdAt: new Date("2026-04-08T10:00:00Z") },
     ];
-    await db.collection("purchases").insertMany(mockPurchases);
+    for (const mp of mockPurchases) {
+      await db.collection("purchases").updateOne(
+        { sessionId: mp.sessionId },
+        { $setOnInsert: mp },
+        { upsert: true }
+      );
+    }
   }
 };
 
@@ -99,10 +105,10 @@ export const fetchAdminOverviewStats = async () => {
   await seedMockDataIfNeeded(db);
 
   const [usersCount, recipesCount, premiumCount, reportsCount] = await Promise.all([
-    db.collection("user").countDocuments(),
+    db.collection("user").countDocuments({ email: { $nin: ["a@gmail.com", "a@b.com"] } }),
     db.collection("recipes").countDocuments(),
-    db.collection("user").countDocuments({ plan: "premium" }),
-    db.collection("recipeReports").countDocuments({ status: "pending" }),
+    db.collection("user").countDocuments({ plan: "premium", email: { $nin: ["a@gmail.com", "a@b.com"] } }),
+    db.collection("recipeReports").countDocuments({ status: "pending", reporterEmail: { $nin: ["a@gmail.com", "a@b.com"] } }),
   ]);
 
   return {
@@ -117,7 +123,9 @@ export const fetchAllUsersAdmin = async () => {
   await verifyAdmin();
   const db = await getDb();
   await seedMockDataIfNeeded(db);
-  const users = await db.collection("user").find().toArray();
+  const users = await db.collection("user").find({
+    email: { $nin: ["a@gmail.com", "a@b.com"] }
+  }).toArray();
 
   return users.map(u => ({
     ...u,
@@ -263,7 +271,9 @@ export const fetchAllReportsAdmin = async () => {
   const db = await getDb();
   await seedMockDataIfNeeded(db);
   
-  const reports = await db.collection("recipeReports").find().sort({ createdAt: -1 }).toArray();
+  const reports = await db.collection("recipeReports").find({
+    reporterEmail: { $nin: ["a@gmail.com", "a@b.com"] }
+  }).sort({ createdAt: -1 }).toArray();
 
   const recipeIds = reports.map(r => {
     try {
@@ -331,7 +341,9 @@ export const fetchAllTransactionsAdmin = async () => {
   await verifyAdmin();
   const db = await getDb();
   await seedMockDataIfNeeded(db);
-  const transactions = await db.collection("purchases").find().sort({ createdAt: -1 }).toArray();
+  const transactions = await db.collection("purchases").find({
+    userEmail: { $nin: ["a@gmail.com", "a@b.com", "nusrat.jahan@gmail.com", "ayesha.rahman@gmail.com", "mehedi.hasan@gmail.com"] }
+  }).sort({ createdAt: -1 }).toArray();
 
   return transactions.map(t => ({
     ...t,

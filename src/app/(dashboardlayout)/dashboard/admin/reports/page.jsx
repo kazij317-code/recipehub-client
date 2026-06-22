@@ -187,6 +187,10 @@ const AdminReportsPage = () => {
                         <span className="inline-block rounded-full bg-rose-50 border border-rose-100 px-3 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-950/20 dark:border-rose-900/30 dark:text-rose-400">
                           Offensive Content
                         </span>
+                      ) : r.reason === "Copyright Issue" ? (
+                        <span className="inline-block rounded-full bg-indigo-50 border border-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-950/20 dark:border-indigo-900/30 dark:text-indigo-400">
+                          Copyright Issue
+                        </span>
                       ) : (
                         <span className="inline-block rounded-full bg-amber-50 border border-amber-100 px-3 py-1 text-xs font-semibold text-amber-700 dark:bg-amber-950/20 dark:border-amber-900/30 dark:text-amber-400">
                           Spam
