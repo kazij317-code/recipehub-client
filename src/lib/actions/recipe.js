@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { getDb } from "../db";
 import { ObjectId } from "mongodb";
 import { getUserSession } from "../session/session";
+import { revalidatePath } from "next/cache";
 
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_URL ||
@@ -17,7 +18,9 @@ const appBaseUrl =
   "http://localhost:3000";
 
 export const addRecipe = async (data) => {
-  return await serverMution("/api/recipes", data, "POST");
+  const result = await serverMution("/api/recipes", data, "POST");
+  revalidatePath("/dashboard/my-recipes");
+  return result;
 };
 
 export const updateRecipe = async (id, data) => {

@@ -114,14 +114,18 @@ export default function AddRecipeForm({ user }) {
       const res = await addRecipe(finalRecipeData);
       if (res?.status === true) {
         toast.success(`${res.message}`);
-        router.push("/dashboard/my-recipes");
+
+        if (user?.limit < 2) {
+          try {
+            await updateuserAddrecipeLimit(user?.id);
+          } catch (limitErr) {
+            console.error("Limit update error:", limitErr);
+          }
+        }
+
+        window.location.href = "/dashboard/my-recipes";
       } else {
         toast.error(res?.message || "Failed to save recipe.");
-      }
-
-      if (user?.limit < 2) {
-        const updateRes = await updateuserAddrecipeLimit(user?.id);
-        console.log(updateRes);
       }
     } catch (error) {
       console.error("Add recipe error:", error);

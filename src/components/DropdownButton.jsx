@@ -13,6 +13,7 @@ const DropdownButton = ({ user }) => {
   const handleLogout = async () => {
     await authClient.signOut();
     toast.success("logout successfully");
+    window.location.href = "/";
   };
 
   return (

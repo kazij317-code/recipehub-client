@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import {
   LayoutDashboard,
   Plus,
@@ -15,6 +16,8 @@ import {
   ShieldAlert,
   CreditCard,
 } from "lucide-react";
+
+import { authClient } from "@/lib/auth-client";
 
 const DashboardNavItems = ({ navItems, user }) => {
   const pathname = usePathname();
@@ -49,13 +52,12 @@ const DashboardNavItems = ({ navItems, user }) => {
 
   const handleSignOut = async () => {
     try {
-      // Call logout endpoint if available, otherwise just redirect
-      await fetch("/api/auth/logout", { method: "POST" }).catch(() => null);
-      // Redirect to home
-      router.push("/");
+      await authClient.signOut();
+      toast.success("logout successfully");
     } catch (error) {
       console.error("Logout error:", error);
-      router.push("/");
+    } finally {
+      window.location.href = "/";
     }
   };
 
