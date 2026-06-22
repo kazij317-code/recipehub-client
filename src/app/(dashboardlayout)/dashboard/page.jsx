@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getUserSession } from "@/lib/session/session";
 import {
   fetchUserRecipes,
@@ -10,6 +11,10 @@ import { FileText, Bookmark, Heart, ArrowRight } from "lucide-react";
 
 const DashboardPage = async () => {
   const user = await getUserSession();
+  if (user?.role === "admin") {
+    redirect("/dashboard/admin");
+  }
+
   const recipesResponse = await fetchUserRecipes(user?.email);
   const recipes = recipesResponse?.data || [];
   const favoritesResponse = await fetchUserFavorites(user?.email);

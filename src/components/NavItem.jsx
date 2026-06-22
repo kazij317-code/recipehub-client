@@ -10,6 +10,10 @@ import {
   ShoppingBag,
   User,
   LogOut,
+  Users,
+  ClipboardList,
+  ShieldAlert,
+  CreditCard,
 } from "lucide-react";
 
 const DashboardNavItems = ({ navItems, user }) => {
@@ -30,6 +34,14 @@ const DashboardNavItems = ({ navItems, user }) => {
         return <ShoppingBag size={20} />;
       case "Profile":
         return <User size={20} />;
+      case "Manage Users":
+        return <Users size={20} />;
+      case "Manage Recipes":
+        return <ClipboardList size={20} />;
+      case "Reports":
+        return <ShieldAlert size={20} />;
+      case "Transactions":
+        return <CreditCard size={20} />;
       default:
         return <LayoutDashboard size={20} />;
     }

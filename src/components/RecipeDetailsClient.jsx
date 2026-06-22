@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Heart, Star, Lock } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { likeRecipe, saveFavorite, fetchUserFavorites } from "@/lib/actions/recipe";
+import { reportRecipeIssue } from "@/lib/actions/admin";
 import { createRecipeCheckoutAction } from "@/lib/actions/checkout";
 import toast from "react-hot-toast";
 
@@ -168,6 +169,22 @@ const RecipeDetailsClient = ({ fallbackId }) => {
     }
   };
 
+  const handleReportIssue = async () => {
+    if (!user?.email) {
+      toast.error("You must be signed in to report an issue.");
+      return;
+    }
+    const issue = prompt("Please describe the issue with this recipe:");
+    if (!issue || !issue.trim()) return;
+
+    try {
+      await reportRecipeIssue(recipeId, user.email, issue);
+      toast.success("Thank you for your report. Admin will review it.");
+    } catch (error) {
+      toast.error(error?.message || "Failed to submit report.");
+    }
+  };
+
   const handlePurchase = async () => {
     if (!user) {
       toast.error("You must be signed in to purchase recipe details.");
@@ -318,7 +335,10 @@ const RecipeDetailsClient = ({ fallbackId }) => {
               )}
             </div>
             <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-zinc-800 dark:text-slate-400">
-              <button className="flex items-center gap-2 text-left text-slate-700 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400">
+              <button
+                onClick={handleReportIssue}
+                className="flex items-center gap-2 text-left text-slate-700 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400"
+              >
                 Report Issue
               </button>
             </div>
