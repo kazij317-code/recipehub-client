@@ -12,6 +12,10 @@ const RecipeDetailsClient = ({ fallbackId }) => {
   const routeId = params?.id;
   const recipeId = fallbackId || routeId;
 
+  const router = useRouter();
+  const { data } = authClient.useSession();
+  const user = data?.user || null;
+
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -118,10 +122,6 @@ const RecipeDetailsClient = ({ fallbackId }) => {
     : typeof recipe.instructions === "string"
     ? recipe.instructions.split("\n").map((item) => item.trim()).filter(Boolean)
     : [];
-
-  const router = useRouter();
-  const { data } = authClient.useSession();
-  const user = data?.user || null;
 
   const handleLike = async () => {
     try {

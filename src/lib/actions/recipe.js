@@ -1,10 +1,16 @@
 "use server";
 
 import { serverMution } from "../core/server";
+import { headers } from "next/headers";
 
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_URL ||
   process.env.NEXT_PUBLIC_BASE_URL ||
+  "http://localhost:3000";
+
+const appBaseUrl =
+  process.env.BETTER_AUTH_URL ||
+  process.env.NEXT_PUBLIC_APP_URL ||
   "http://localhost:3000";
 
 export const addRecipe = async (data) => {
@@ -85,10 +91,21 @@ export const fetchUserRecipes = async (email) => {
 };
 
 export const likeRecipe = async (id) => {
-  const url = new URL(`/api/recipes/${id}/like`, apiBaseUrl);
+  const url = new URL(`/api/recipes/${id}/like`, appBaseUrl);
+  const clientHeaders = await headers();
+  const reqHeaders = { "Content-Type": "application/json" };
+  const cookie = clientHeaders.get("cookie");
+  if (cookie) {
+    reqHeaders["cookie"] = cookie;
+  }
+  const authHeader = clientHeaders.get("authorization");
+  if (authHeader) {
+    reqHeaders["authorization"] = authHeader;
+  }
+
   const response = await fetch(url.toString(), {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: reqHeaders,
   });
 
   if (!response.ok) {
@@ -100,10 +117,21 @@ export const likeRecipe = async (id) => {
 
 
 export const saveFavorite = async (email, recipeId) => {
-  const url = new URL(`/api/user/favorites`, apiBaseUrl);
+  const url = new URL(`/api/user/favorites`, appBaseUrl);
+  const clientHeaders = await headers();
+  const reqHeaders = { "Content-Type": "application/json" };
+  const cookie = clientHeaders.get("cookie");
+  if (cookie) {
+    reqHeaders["cookie"] = cookie;
+  }
+  const authHeader = clientHeaders.get("authorization");
+  if (authHeader) {
+    reqHeaders["authorization"] = authHeader;
+  }
+
   const response = await fetch(url.toString(), {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: reqHeaders,
     body: JSON.stringify({ email, recipeId }),
   });
 
@@ -119,7 +147,7 @@ export const fetchUserFavorites = async (email) => {
     return { count: 0, data: [] };
   }
 
-  const url = new URL("/api/user-favorites", apiBaseUrl);
+  const url = new URL("/api/user-favorites", appBaseUrl);
   url.searchParams.set("email", email);
 
   const response = await fetch(url.toString(), {
@@ -134,7 +162,7 @@ export const fetchUserFavorites = async (email) => {
 };
 
 export const fetchTotalEngagement = async () => {
-  const url = new URL("/api/engagement", apiBaseUrl);
+  const url = new URL("/api/engagement", appBaseUrl);
   const response = await fetch(url.toString(), {
     cache: "no-store",
   });

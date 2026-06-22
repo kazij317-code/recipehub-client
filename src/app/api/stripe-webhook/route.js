@@ -1,0 +1,69 @@
+import { NextResponse } from "next/server";
+import Stripe from "stripe";
+import { getDb } from "@/lib/db";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export async function POST(request) {
+  const sig = request.headers.get("stripe-signature");
+  const body = await request.text();
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    console.error("Webhook signature verification failed:", err.message);
+    return NextResponse.json(
+      { message: "Invalid signature" },
+      { status: 400 }
+    );
+  }
+
+  const db = await getDb();
+  const usersCollection = db.collection("user");
+
+  // Handle checkout.session.completed event
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const userId = session.metadata?.userId;
+    const userEmail = session.metadata?.userEmail;
+
+    if (userId && userEmail) {
+      try {
+        // Update user to premium
+        await usersCollection.updateOne(
+          { _id: userId },
+          {
+            $set: {
+              plan: "premium",
+              isPremium: true,
+              limit: -1, // Unlimited
+            },
+          }
+        );
+
+        console.log(`User ${userEmail} upgraded to premium`);
+      } catch (error) {
+        console.error("Failed to update user plan:", error);
+        return NextResponse.json(
+          { message: "Failed to update user" },
+          { status: 500 }
+        );
+      }
+    }
+  }
+
+  return NextResponse.json({ received: true });
+}
+
+export async function GET() {
+  return NextResponse.json(
+    { message: "Webhook endpoint" },
+    { status: 405 }
+  );
+}

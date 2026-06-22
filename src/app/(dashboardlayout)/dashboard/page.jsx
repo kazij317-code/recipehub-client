@@ -109,18 +109,24 @@ const DashboardPage = async () => {
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
           <div className="flex-1">
             <h3 className="mb-2 text-sm font-semibold text-slate-900 dark:text-white">
-              • Storage Limit: {publishedRecipes}/2 Recipes
+              {user?.plan === "premium"
+                ? `• Premium Plan: ${publishedRecipes} Recipes (Unlimited)`
+                : `• Storage Limit: ${publishedRecipes}/2 Recipes`}
             </h3>
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              Basic accounts are limited to 2 recipes. Upgrade to unlock unlimited storage.
+              {user?.plan === "premium"
+                ? "You have unlocked unlimited recipe storage with your premium plan!"
+                : "Basic accounts are limited to 2 recipes. Upgrade to unlock unlimited storage."}
             </p>
           </div>
-          <Link
-            href="#"
-            className="whitespace-nowrap rounded-full bg-slate-900 px-6 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
-          >
-            Upgrade Account
-          </Link>
+          {user?.plan !== "premium" && (
+            <Link
+              href="/dashboard/upgrade"
+              className="whitespace-nowrap rounded-full bg-slate-900 px-6 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+            >
+              Upgrade Account
+            </Link>
+          )}
         </div>
       </div>
 
