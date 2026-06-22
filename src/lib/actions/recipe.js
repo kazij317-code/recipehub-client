@@ -94,28 +94,43 @@ export const fetchUserRecipes = async (email) => {
 };
 
 export const likeRecipe = async (id) => {
-  const url = new URL(`/api/recipes/${id}/like`, appBaseUrl);
-  const clientHeaders = await headers();
-  const reqHeaders = { "Content-Type": "application/json" };
-  const cookie = clientHeaders.get("cookie");
-  if (cookie) {
-    reqHeaders["cookie"] = cookie;
-  }
-  const authHeader = clientHeaders.get("authorization");
-  if (authHeader) {
-    reqHeaders["authorization"] = authHeader;
+  const user = await getUserSession();
+  const userEmail = user?.email;
+
+  if (!userEmail) {
+    throw new Error("Unauthorized. Please log in.");
   }
 
-  const response = await fetch(url.toString(), {
-    method: "POST",
-    headers: reqHeaders,
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to like recipe");
+  if (!id) {
+    throw new Error("Recipe id is required.");
   }
 
-  return response.json();
+  const db = await getDb();
+  const likesCollection = db.collection("recipeLikes");
+  const recipesCollection = db.collection("recipes");
+
+  const existingLike = await likesCollection.findOne({ recipeId: id, userEmail });
+  if (existingLike) {
+    const likesCount = await likesCollection.countDocuments({ recipeId: id });
+    return { status: true, likesCount, data: { likesCount }, message: "Already liked" };
+  }
+
+  await likesCollection.insertOne({ recipeId: id, userEmail, createdAt: new Date() });
+  const likesCount = await likesCollection.countDocuments({ recipeId: id });
+
+  try {
+    let objectId;
+    try {
+      objectId = new ObjectId(id);
+      await recipesCollection.updateOne({ _id: objectId }, { $set: { likesCount } });
+    } catch (e) {
+      await recipesCollection.updateOne({ id }, { $set: { likesCount } });
+    }
+  } catch (e) {
+    console.error("Error updating recipe likesCount:", e);
+  }
+
+  return { status: true, likesCount, data: { likesCount }, message: "Recipe liked" };
 };
 
 
@@ -220,14 +235,14 @@ export const fetchUserFavorites = async (email) => {
 };
 
 export const fetchTotalEngagement = async () => {
-  const url = new URL("/api/engagement", appBaseUrl);
-  const response = await fetch(url.toString(), {
-    cache: "no-store",
-  });
+  const db = await getDb();
+  const likesCollection = db.collection("recipeLikes");
+  const favoritesCollection = db.collection("recipeFavorites");
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch engagement");
-  }
+  const [likesCount, favoritesCount] = await Promise.all([
+    likesCollection.countDocuments(),
+    favoritesCollection.countDocuments(),
+  ]);
 
-  return response.json();
+  return { count: likesCount + favoritesCount, likesCount, favoritesCount };
 };
