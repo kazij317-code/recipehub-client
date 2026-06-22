@@ -2,9 +2,10 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, Lock } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { likeRecipe, saveFavorite } from "@/lib/actions/recipe";
+import { createRecipeCheckoutAction } from "@/lib/actions/checkout";
 import toast from "react-hot-toast";
 
 const RecipeDetailsClient = ({ fallbackId }) => {
@@ -19,16 +20,12 @@ const RecipeDetailsClient = ({ fallbackId }) => {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const apiBaseUrl =
-    process.env.NEXT_PUBLIC_API_URL ||
-    process.env.NEXT_PUBLIC_BASE_URL ||
-    "";
+  const [purchaseLoading, setPurchaseLoading] = useState(false);
 
   const requestUrl = useMemo(() => {
     if (!recipeId) return null;
-    return `${apiBaseUrl}/api/recipes/${recipeId}`;
-  }, [apiBaseUrl, recipeId]);
+    return `/api/recipes/${recipeId}`;
+  }, [recipeId]);
 
   useEffect(() => {
     if (!requestUrl) {
@@ -150,6 +147,28 @@ const RecipeDetailsClient = ({ fallbackId }) => {
     }
   };
 
+  const handlePurchase = async () => {
+    if (!user) {
+      toast.error("You must be signed in to purchase recipe details.");
+      return;
+    }
+
+    setPurchaseLoading(true);
+    try {
+      const result = await createRecipeCheckoutAction(recipeId);
+      if (result?.url) {
+        window.location.href = result.url;
+        return;
+      }
+      throw new Error("Could not initiate purchase checkout");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Failed to start checkout");
+    } finally {
+      setPurchaseLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-8 py-10 px-4 md:px-10">
       <div className="grid gap-6 lg:grid-cols-[1.8fr_1fr]">
@@ -189,36 +208,57 @@ const RecipeDetailsClient = ({ fallbackId }) => {
             </div>
 
             <div className="space-y-6">
-              <div>
-                <h2 className="mb-4 text-2xl font-semibold text-slate-900 dark:text-white">Ingredients</h2>
-                <ul className="space-y-3">
-                  {ingredients.map((item, index) => (
-                    <li
-                      key={index}
-                      className="rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-slate-300"
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h2 className="mb-4 text-2xl font-semibold text-slate-900 dark:text-white">Instructions</h2>
-                <div className="space-y-4">
-                  {instructions.map((step, index) => (
-                    <div key={index} className="rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-                      <div className="mb-2 flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-white text-sm font-semibold text-slate-900 shadow-sm dark:bg-zinc-950 dark:text-white">
-                          {index + 1}
-                        </div>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">Step {index + 1}</p>
-                      </div>
-                      <p className="text-slate-700 dark:text-slate-300">{step}</p>
-                    </div>
-                  ))}
+              {recipe.isLocked ? (
+                <div className="relative rounded-[32px] border border-dashed border-slate-200 dark:border-zinc-800 bg-slate-50/50 dark:bg-zinc-900/50 p-10 text-center backdrop-blur-xs">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300">
+                    <Lock className="h-8 w-8 animate-pulse text-slate-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">Recipe Details Locked</h3>
+                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                    Purchase this recipe's details or upgrade to Premium to view ingredients and step-by-step instructions.
+                  </p>
+                  <button
+                    onClick={handlePurchase}
+                    disabled={purchaseLoading}
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-white font-medium hover:bg-slate-800 transition dark:bg-white dark:text-slate-950 disabled:opacity-50"
+                  >
+                    {purchaseLoading ? "Redirecting..." : "Purchase Details to Unlock"}
+                  </button>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <div>
+                    <h2 className="mb-4 text-2xl font-semibold text-slate-900 dark:text-white">Ingredients</h2>
+                    <ul className="space-y-3">
+                      {ingredients.map((item, index) => (
+                        <li
+                          key={index}
+                          className="rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-slate-300"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h2 className="mb-4 text-2xl font-semibold text-slate-900 dark:text-white">Instructions</h2>
+                    <div className="space-y-4">
+                      {instructions.map((step, index) => (
+                        <div key={index} className="rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                          <div className="mb-2 flex items-center gap-3">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-white text-sm font-semibold text-slate-900 shadow-sm dark:bg-zinc-950 dark:text-white">
+                              {index + 1}
+                            </div>
+                            <p className="text-sm text-slate-500 dark:text-slate-400">Step {index + 1}</p>
+                          </div>
+                          <p className="text-slate-700 dark:text-slate-300">{step}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -245,9 +285,15 @@ const RecipeDetailsClient = ({ fallbackId }) => {
                   Save to Favorites
                 </div>
               </button>
-              <button className="w-full rounded-3xl bg-slate-900 px-4 py-3 text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950">
-                Purchase Details
-              </button>
+              {recipe.isLocked && (
+                <button
+                  onClick={handlePurchase}
+                  disabled={purchaseLoading}
+                  className="w-full rounded-3xl bg-slate-900 px-4 py-3 text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 disabled:opacity-50"
+                >
+                  {purchaseLoading ? "Redirecting..." : "Purchase Details"}
+                </button>
+              )}
             </div>
             <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-zinc-800 dark:text-slate-400">
               <button className="flex items-center gap-2 text-left text-slate-700 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400">

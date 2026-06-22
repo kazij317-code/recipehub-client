@@ -31,7 +31,12 @@ const ProfilePage = () => {
               </Avatar>
               <div>
                 <div className="font-semibold">{user?.name}</div>
-                <div className="text-xs text-slate-500">{user?.email}</div>
+                <div className="text-xs text-slate-500 mb-1">{user?.email}</div>
+                {(user?.plan === "premium" || user?.isPremium) && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 px-2.5 py-0.5 text-xs font-semibold text-white">
+                    👑 Premium
+                  </span>
+                )}
               </div>
             </div>
 
@@ -40,7 +45,7 @@ const ProfilePage = () => {
         </div>
 
         <div>
-          {user?.isPremium ? (
+          {user?.plan === "premium" || user?.isPremium ? (
             <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center">
               <div className="text-3xl">👑</div>
               <h4 className="mt-4 font-semibold">Premium Member</h4>

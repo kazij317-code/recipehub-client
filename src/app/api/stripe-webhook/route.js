@@ -32,12 +32,43 @@ export async function POST(request) {
     const session = event.data.object;
     const userId = session.metadata?.userId;
     const userEmail = session.metadata?.userEmail;
+    const recipeId = session.metadata?.recipeId;
+    const paymentType = session.metadata?.paymentType;
 
-    if (userId && userEmail) {
+    if (paymentType === "recipe_purchase" && recipeId && (userId || userEmail)) {
       try {
+        const purchasesCollection = db.collection("purchases");
+        await purchasesCollection.updateOne(
+          {
+            userEmail: userEmail,
+            recipeId: recipeId,
+          },
+          {
+            $set: {
+              userId: userId,
+              userEmail: userEmail,
+              recipeId: recipeId,
+              paymentType: "recipe_purchase",
+              sessionId: session.id,
+              createdAt: new Date(),
+            },
+          },
+          { upsert: true }
+        );
+        console.log(`User ${userEmail || userId} purchased recipe ${recipeId}`);
+      } catch (error) {
+        console.error("Failed to record recipe purchase:", error);
+        return NextResponse.json(
+          { message: "Failed to record purchase" },
+          { status: 500 }
+        );
+      }
+    } else if (userId || userEmail) {
+      try {
+        const query = userEmail ? { email: userEmail } : { _id: userId };
         // Update user to premium
         await usersCollection.updateOne(
-          { _id: userId },
+          query,
           {
             $set: {
               plan: "premium",
@@ -47,7 +78,7 @@ export async function POST(request) {
           }
         );
 
-        console.log(`User ${userEmail} upgraded to premium`);
+        console.log(`User ${userEmail || userId} upgraded to premium`);
       } catch (error) {
         console.error("Failed to update user plan:", error);
         return NextResponse.json(

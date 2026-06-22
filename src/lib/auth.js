@@ -32,6 +32,10 @@ export const auth = betterAuth({
       limit: {
         defaultValue: 0,
       },
+      isPremium: {
+        type: "boolean",
+        defaultValue: false,
+      },
     },
   },
   session: {

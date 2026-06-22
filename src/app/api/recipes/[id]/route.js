@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { ObjectId } from "mongodb";
+import { auth } from "@/lib/auth";
 
 export async function GET(request, { params }) {
-  const recipeId = params?.id;
+  const resolvedParams = await params;
+  const recipeId = resolvedParams?.id;
 
   if (!recipeId) {
     return NextResponse.json(
@@ -12,6 +14,7 @@ export async function GET(request, { params }) {
     );
   }
 
+  const session = await auth.api.getSession({ request });
   const db = await getDb();
   const recipesCollection = db.collection("recipes");
 
@@ -33,6 +36,30 @@ export async function GET(request, { params }) {
       );
     }
 
+    // Lock/Unlock check
+    const isOwner = session?.user?.email && recipe.userEmail === session.user.email;
+    const isPremium = session?.user?.plan === "premium" || session?.user?.isPremium;
+    
+    let isPurchased = false;
+    if (session?.user?.email) {
+      const purchasesCollection = db.collection("purchases");
+      const purchase = await purchasesCollection.findOne({
+        userEmail: session.user.email,
+        recipeId: recipeId,
+      });
+      isPurchased = !!purchase;
+    }
+
+    const isUnlocked = isOwner || isPremium || isPurchased;
+
+    if (!isUnlocked) {
+      recipe.ingredients = [];
+      recipe.instructions = [];
+      recipe.isLocked = true;
+    } else {
+      recipe.isLocked = false;
+    }
+
     return NextResponse.json({ data: recipe, status: true });
   } catch (error) {
     console.error("Error fetching recipe:", error);
@@ -44,7 +71,8 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const recipeId = params?.id;
+  const resolvedParams = await params;
+  const recipeId = resolvedParams?.id;
   const body = await request.json();
 
   if (!recipeId) {
@@ -96,7 +124,8 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const recipeId = params?.id;
+  const resolvedParams = await params;
+  const recipeId = resolvedParams?.id;
 
   if (!recipeId) {
     return NextResponse.json(
