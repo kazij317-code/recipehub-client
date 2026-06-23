@@ -53,13 +53,15 @@ const RecipeDetailsClient = ({ fallbackId }) => {
         }
 
         const data = await response.json();
-        setRecipe(data?.data || null);
+        if (!controller.signal.aborted) {
+          setRecipe(data?.data || null);
+          setLoading(false);
+        }
       } catch (err) {
         if (err.name !== "AbortError") {
           setError(err.message || "Error loading recipe details");
+          setLoading(false);
         }
-      } finally {
-        setLoading(false);
       }
     };
 

@@ -55,6 +55,9 @@ const BrowseAllRecipePage = async ({ searchParams }) => {
           Filter by Category
         </h3>
         <CategoryFilter availableCategories={AVAILABLE_CATEGORIES} />
+        <div className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+          Showing {recipes.length} results (Page {pagination.page} of {pagination.totalPages})
+        </div>
       </div>
 
       {recipes.length === 0 ? (

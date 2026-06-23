@@ -13,10 +13,10 @@ export default async function Home() {
   // 1. Featured Editorials (isFeatured === true)
   const featuredRecipes = recipes.filter((r) => r.isFeatured);
 
-  // 2. Popular Recipes (Sorted by likesCount descending, limit to 8)
+  // 2. Popular Recipes (Sorted by likesCount descending, limit to 6)
   const popularRecipes = [...recipes]
     .sort((a, b) => (b.likesCount || 0) - (a.likesCount || 0))
-    .slice(0, 8);
+    .slice(0, 6);
 
   return (
     <>
