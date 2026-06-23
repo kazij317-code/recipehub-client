@@ -22,7 +22,8 @@ const DashboardPage = async () => {
 
   const publishedRecipes = recipes.length;
   const savedFavorites = favoritesResponse?.count ?? 0;
-  const totalEngagement = engagementResponse?.count ?? 0;
+  const myRecipesLikesTotal = recipes.reduce((sum, r) => sum + (r.likesCount || 0), 0);
+  const totalEngagement = myRecipesLikesTotal;
 
   const userName = user?.name || user?.email?.split("@")[0] || "User";
 

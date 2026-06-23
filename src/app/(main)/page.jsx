@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Heart } from "lucide-react";
 
 export default async function Home() {
-  const recipesResponse = await fetchAllRecipes();
+  const recipesResponse = await fetchAllRecipes({ limit: 100 });
   const recipes = recipesResponse?.data || [];
 
   // 1. Featured Editorials (isFeatured === true)
