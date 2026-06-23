@@ -50,6 +50,9 @@ export async function GET(request, { params }) {
     const isPremium = session?.user?.plan === "premium" || session?.user?.isPremium;
 
     let isPurchased = false;
+    let isLiked = false;
+    let isReported = false;
+
     if (session?.user?.email) {
       const purchasesCollection = db.collection("purchases");
       const possibleIds = [recipeId];
@@ -64,11 +67,27 @@ export async function GET(request, { params }) {
         recipeId: { $in: possibleIds },
       });
       isPurchased = !!purchase;
+
+      // Check if user has liked this recipe
+      const existingLike = await db.collection("recipeLikes").findOne({
+        userEmail: session.user.email,
+        recipeId: { $in: possibleIds },
+      });
+      isLiked = !!existingLike;
+
+      // Check if user has reported this recipe
+      const existingReport = await db.collection("recipeReports").findOne({
+        reporterEmail: session.user.email,
+        recipeId: { $in: possibleIds },
+      });
+      isReported = !!existingReport;
     }
 
     // Recipes are always unlocked
     recipe.isLocked = false;
     recipe.isPurchased = !!isPurchased;
+    recipe.isLiked = isLiked;
+    recipe.isReported = isReported;
 
     return NextResponse.json({ data: recipe, status: true });
   } catch (error) {

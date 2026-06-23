@@ -324,6 +324,17 @@ export const reportRecipeIssue = async (recipeId, userEmail, reason, description
   }
 
   const db = await getDb();
+  
+  // Prevent duplicate reports by the same user
+  const existingReport = await db.collection("recipeReports").findOne({
+    recipeId,
+    reporterEmail: userEmail,
+  });
+
+  if (existingReport) {
+    throw new Error("You have already reported this recipe.");
+  }
+
   const report = {
     recipeId,
     reporterEmail: userEmail,

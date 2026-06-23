@@ -314,11 +314,12 @@ const RecipeDetailsClient = ({ fallbackId }) => {
             <div className="mt-4 space-y-3">
               <button
                 onClick={handleLike}
-                className="w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-left text-slate-900 transition hover:bg-slate-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-slate-100"
+                disabled={recipe.isLiked}
+                className="w-full rounded-3xl border border-slate-200 bg-white px-4 py-3 text-left text-slate-900 transition hover:bg-slate-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-slate-100 disabled:opacity-75"
               >
                 <div className="flex items-center gap-2">
-                  <Heart className="h-4 w-4" />
-                  Like ({recipe.likesCount ?? 0})
+                  <Heart className={`h-4 w-4 ${recipe.isLiked ? "fill-rose-500 text-rose-500" : ""}`} />
+                  {recipe.isLiked ? "Liked" : "Like"} ({recipe.likesCount ?? 0})
                 </div>
               </button>
               <button
@@ -341,11 +342,23 @@ const RecipeDetailsClient = ({ fallbackId }) => {
             </div>
             <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-zinc-800 dark:text-slate-400">
               {user?.email ? (
-                <ReportRecipeModal
-                  recipeId={recipeId}
-                  recipeName={recipe.recipeName}
-                  userEmail={user.email}
-                />
+                recipe.isReported ? (
+                  <span className="font-semibold text-rose-600 dark:text-rose-400">
+                    Reported
+                  </span>
+                ) : (
+                  <ReportRecipeModal
+                    recipeId={recipeId}
+                    recipeName={recipe.recipeName}
+                    userEmail={user.email}
+                    onSuccess={() => {
+                      setRecipe((prev) => ({
+                        ...prev,
+                        isReported: true,
+                      }));
+                    }}
+                  />
+                )
               ) : (
                 <button
                   onClick={() => toast.error("You must be signed in to report an issue.")}
