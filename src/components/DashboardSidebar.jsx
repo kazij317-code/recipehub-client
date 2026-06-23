@@ -82,6 +82,8 @@ const DashboardSidebar = async () => {
   const userImage = user?.image || user?.picture || "https://ui-avatars.com/api/?name=" + userName;
   const isAdmin = user?.role === "admin";
 
+  const isPremium = user?.plan === "premium" || user?.isPremium;
+
   return (
     <aside className="hidden lg:block w-64 h-screen shrink-0 border-r border-slate-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 sticky top-0 overflow-y-auto">
       {/* Sidebar Header Section */}
@@ -95,11 +97,18 @@ const DashboardSidebar = async () => {
       ) : (
         <div className="mb-8 space-y-4">
           <div className="flex items-center gap-3">
-            <img
-              src={userImage}
-              alt={userName}
-              className="h-12 w-12 rounded-full object-cover"
-            />
+            <div className="relative">
+              <img
+                src={userImage}
+                alt={userName}
+                className="h-12 w-12 rounded-full object-cover border border-slate-100 dark:border-zinc-800"
+              />
+              {isPremium && (
+                <span className="absolute -bottom-1 -right-1 flex h-5 px-1.5 items-center justify-center rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-[9px] font-black uppercase tracking-wider text-white border border-white dark:border-zinc-900 shadow-md">
+                  PRO
+                </span>
+              )}
+            </div>
             <div className="flex-1 min-w-0">
               <h3 className="truncate font-semibold text-slate-900 dark:text-white">
                 {userName}
