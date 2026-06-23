@@ -36,6 +36,16 @@ export async function GET(request, { params }) {
       );
     }
 
+    // Fetch author details
+    if (recipe.userEmail) {
+      try {
+        const authorUser = await db.collection("user").findOne({ email: recipe.userEmail });
+        recipe.authorImage = authorUser?.image || authorUser?.picture || null;
+      } catch (authorErr) {
+        console.error("Error fetching author details:", authorErr);
+      }
+    }
+
     // Lock/Unlock check
     const isOwner = session?.user?.email && recipe.userEmail === session.user.email;
     const isPremium = session?.user?.plan === "premium" || session?.user?.isPremium;

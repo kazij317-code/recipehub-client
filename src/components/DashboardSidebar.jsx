@@ -79,7 +79,7 @@ const DashboardSidebar = async () => {
   const navItems = daashboardItems[user?.role || "user"];
   const userName = user?.name || user?.email?.split("@")[0] || "User";
   const userEmail = user?.email || "user@example.com";
-  const userImage = user?.picture || "https://ui-avatars.com/api/?name=" + userName;
+  const userImage = user?.image || user?.picture || "https://ui-avatars.com/api/?name=" + userName;
   const isAdmin = user?.role === "admin";
 
   return (

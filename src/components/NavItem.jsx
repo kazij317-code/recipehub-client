@@ -62,7 +62,7 @@ const DashboardNavItems = ({ navItems, user }) => {
   };
 
   return (
-    <div className="flex flex-col justify-between h-[calc(100vh-120px)]">
+    <div className="flex flex-col gap-1">
       {/* Navigation Links */}
       <nav className="flex flex-col gap-1">
         {navItems?.map((item) => {
@@ -88,7 +88,7 @@ const DashboardNavItems = ({ navItems, user }) => {
       {/* Sign Out Button */}
       <button
         onClick={handleSignOut}
-        className="flex items-center gap-3 w-full px-4 py-3 rounded-lg font-medium text-rose-600 transition-all duration-200 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
+        className="flex items-center gap-3 w-full px-4 py-3 mt-2 rounded-lg font-medium text-rose-600 transition-all duration-200 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10"
       >
         <LogOut size={20} />
         <span>Sign Out</span>

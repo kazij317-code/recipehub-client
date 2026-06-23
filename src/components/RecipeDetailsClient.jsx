@@ -223,9 +223,17 @@ const RecipeDetailsClient = ({ fallbackId }) => {
               {recipe.recipeName}
             </h1>
             <div className="mt-6 flex items-center gap-3 border-y border-slate-200 py-6 dark:border-zinc-800">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-xl font-bold text-slate-900 dark:bg-zinc-900 dark:text-white">
-                {authorName.charAt(0).toUpperCase()}
-              </div>
+              {recipe.authorImage ? (
+                <img
+                  src={recipe.authorImage}
+                  alt={authorName}
+                  className="h-14 w-14 rounded-full object-cover border border-slate-200 dark:border-zinc-700 shadow-sm"
+                />
+              ) : (
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-xl font-bold text-slate-900 dark:bg-zinc-900 dark:text-white animate-pulse">
+                  {authorName.charAt(0).toUpperCase()}
+                </div>
+              )}
               <div>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">{authorName}</p>
                 <p className="text-sm text-slate-500 dark:text-slate-400">Author</p>
