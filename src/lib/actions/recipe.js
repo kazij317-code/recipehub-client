@@ -35,8 +35,16 @@ export const updateuserAddrecipeLimit = async (id) => {
   return await serverMution(`/api/user/${id}`, null, "PATCH");
 };
 
-export const fetchAllRecipes = async () => {
-  const response = await fetch(new URL("/api/allrecipes", apiBaseUrl).toString(), {
+export const fetchAllRecipes = async (params = {}) => {
+  const { page = 1, limit = 9, categories = "" } = params;
+  const url = new URL("/api/allrecipes", apiBaseUrl);
+  url.searchParams.set("page", String(page));
+  url.searchParams.set("limit", String(limit));
+  if (categories) {
+    url.searchParams.set("categories", categories);
+  }
+
+  const response = await fetch(url.toString(), {
     cache: "no-store",
   });
   if (!response.ok) {
