@@ -40,7 +40,9 @@ const BrowseAllRecipePage = async ({ searchParams }) => {
     <div className="space-y-8 py-10 px-4 md:px-10 max-w-7xl mx-auto">
       <div className="flex flex-col gap-2">
         <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-          Browse Recipes
+          <span className="bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
+            Browse Recipes
+          </span>
         </h1>
         <p className="text-slate-500 dark:text-slate-400">
           Discover delicious recipes from our community.

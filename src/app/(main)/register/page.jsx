@@ -50,7 +50,7 @@ const RegisterPage = () => {
       newErrors.password =
         "Password must contain uppercase, lowercase, number & special character";
     }
-    
+
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) {
@@ -144,7 +144,7 @@ const RegisterPage = () => {
               <p className="text-red-500 text-sm mt-1">{errors.image}</p>
             )}
           </div>
-          
+
 
           <div>
             <label className="block mb-2 font-medium text-gray-700 dark:text-gray-300">
@@ -173,12 +173,12 @@ const RegisterPage = () => {
             )}
           </div>
 
-          
+
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-semibold transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70"
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 shadow-md hover:shadow-cyan-500/20 cursor-pointer"
           >
             {loading ? (
               <>
@@ -204,9 +204,9 @@ const RegisterPage = () => {
           Continue with Google
         </button> */}
         {/* Google */}
-          <div className="border rounded-xl p-1 hover:shadow-md transition">
-            <GoogleLogin />
-          </div>
+        <div className="border rounded-xl p-1 hover:shadow-md transition">
+          <GoogleLogin />
+        </div>
 
         <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
           Already have an account?{" "}

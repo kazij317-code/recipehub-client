@@ -36,7 +36,7 @@ const Pagination = ({ totalPages, currentPage }) => {
             onClick={() => handlePageChange(pageNum)}
             className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-semibold transition duration-300 cursor-pointer ${
               isCurrent
-                ? "bg-cyan-500 text-white shadow-md shadow-cyan-500/20"
+                ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-md shadow-cyan-500/20"
                 : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-slate-300 dark:hover:bg-zinc-800"
             }`}
           >

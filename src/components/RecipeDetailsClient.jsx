@@ -133,14 +133,14 @@ const RecipeDetailsClient = ({ fallbackId }) => {
   const ingredients = Array.isArray(recipe.ingredients)
     ? recipe.ingredients
     : typeof recipe.ingredients === "string"
-    ? recipe.ingredients.split("\n").map((item) => item.trim()).filter(Boolean)
-    : [];
+      ? recipe.ingredients.split("\n").map((item) => item.trim()).filter(Boolean)
+      : [];
 
   const instructions = Array.isArray(recipe.instructions)
     ? recipe.instructions
     : typeof recipe.instructions === "string"
-    ? recipe.instructions.split("\n").map((item) => item.trim()).filter(Boolean)
-    : [];
+      ? recipe.instructions.split("\n").map((item) => item.trim()).filter(Boolean)
+      : [];
 
   const handleLike = async () => {
     try {

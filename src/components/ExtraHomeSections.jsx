@@ -1,15 +1,32 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { BookOpen, Flame, Sparkles, Compass, Award, ArrowRight } from "lucide-react";
+import React from "react";
+import { motion } from "framer-motion";
+import { BookOpen, Flame, Sparkles, Compass, ArrowRight } from "lucide-react";
 
 const ExtraHomeSections = () => {
-  const [animate, setAnimate] = useState(false);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
 
-  useEffect(() => {
-    // Trigger entry animations on mount
-    setAnimate(true);
-  }, []);
+  const itemVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 80,
+        damping: 15,
+      },
+    },
+  };
 
   const culinaryTips = [
     {
@@ -57,22 +74,37 @@ const ExtraHomeSections = () => {
     <div className="space-y-24 py-16 max-w-7xl mx-auto px-4 md:px-10 overflow-hidden">
       
       {/* SECTION 1: Culinary Tips & Masterclass Cards */}
-      <section className={`space-y-12 transition-all duration-1000 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-100 pb-6 dark:border-zinc-800">
+      <motion.section 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="space-y-12"
+      >
+        <motion.div 
+          variants={itemVariants}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-100 pb-6 dark:border-zinc-800"
+        >
           <div className="space-y-2">
             <span className="text-sm font-bold uppercase tracking-widest text-cyan-500">Culinary Wisdom</span>
-            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white">Kitchen Masterclass</h2>
+            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white">
+              <span className="bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
+                Kitchen Masterclass
+              </span>
+            </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 max-w-md">
             Boost your cooking confidence with quick, essential techniques compiled by our professional chef network.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid gap-6 md:grid-cols-3">
           {culinaryTips.map((tip, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className={`group relative overflow-hidden rounded-[32px] border border-slate-200/60 bg-linear-to-br ${tip.bg} p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl dark:border-zinc-800 dark:bg-zinc-950 ${tip.border}`}
+              variants={itemVariants}
+              whileHover={{ y: -8, scale: 1.01 }}
+              className={`group relative overflow-hidden rounded-[32px] border border-slate-200/60 bg-linear-to-br ${tip.bg} p-8 transition-shadow duration-300 hover:shadow-2xl dark:border-zinc-800 dark:bg-zinc-950 ${tip.border}`}
             >
               <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-md dark:bg-zinc-900">
                 {tip.icon}
@@ -86,34 +118,49 @@ const ExtraHomeSections = () => {
               
               {/* Subtle accent corner glow */}
               <div className="absolute -right-10 -bottom-10 h-24 w-24 rounded-full bg-cyan-500/10 blur-xl group-hover:bg-cyan-500/20 transition-all duration-500" />
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 2: Global Culinary Showcase */}
-      <section className={`space-y-12 transition-all duration-1000 delay-300 transform ${animate ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"}`}>
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-100 pb-6 dark:border-zinc-800">
+      <motion.section 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="space-y-12"
+      >
+        <motion.div 
+          variants={itemVariants}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-100 pb-6 dark:border-zinc-800"
+        >
           <div className="space-y-2">
             <span className="text-sm font-bold uppercase tracking-widest text-blue-500">Global Flavors</span>
-            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white">Explore Cuisines</h2>
+            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white">
+              <span className="bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
+                Explore Cuisines
+              </span>
+            </h2>
           </div>
           <p className="text-slate-500 dark:text-slate-400 max-w-md">
             Embark on a culinary journey around the globe. Discover regional ingredients, spices, and methods.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid gap-6 md:grid-cols-3">
           {showcaseCuisines.map((cuisine, idx) => (
-            <div
+            <motion.div
               key={idx}
+              variants={itemVariants}
+              whileHover={{ scale: 1.02 }}
               className="group relative h-80 overflow-hidden rounded-[32px] shadow-md border border-slate-200/50 dark:border-zinc-800"
             >
               {/* Background Image */}
               <img
                 src={cuisine.image}
                 alt={cuisine.title}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-750 group-hover:scale-105"
               />
               
               {/* Dark Overlay */}
@@ -122,7 +169,7 @@ const ExtraHomeSections = () => {
               {/* Content */}
               <div className="absolute inset-0 flex flex-col justify-end p-8 text-white space-y-2">
                 <div className="flex items-center gap-2">
-                  <Compass className="h-4 w-4 text-cyan-400 animate-spin-slow" />
+                  <Compass className="h-4 w-4 text-cyan-400" />
                   <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
                     {cuisine.count}
                   </span>
@@ -135,10 +182,10 @@ const ExtraHomeSections = () => {
                   <ArrowRight className="h-4 w-4" />
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );

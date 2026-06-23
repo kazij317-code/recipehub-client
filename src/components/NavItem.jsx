@@ -74,7 +74,7 @@ const DashboardNavItems = ({ navItems, user }) => {
               href={item.path}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
                 isActive
-                  ? "bg-orange-100 text-orange-700 dark:bg-orange-500/20 dark:text-orange-200"
+                  ? "bg-gradient-to-r from-cyan-500/10 to-purple-500/10 text-cyan-600 dark:text-cyan-400 font-semibold border-l-4 border-cyan-500 pl-3"
                   : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-zinc-800"
               }`}
             >

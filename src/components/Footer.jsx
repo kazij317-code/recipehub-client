@@ -11,10 +11,12 @@ const Footer = () => {
         {/* Logo & About */}
         <div className="space-y-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-linear-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl shadow-md">
-              R
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-white shadow-md">
+              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 18h12M12 2a5 5 0 0 0-5 5v3h10V7a5 5 0 0 0-5-5zM4 10a2 2 0 0 0-2 2v2c0 2.2 1.8 4 4 4h12c2.2 0 4-1.8 4-4v-2a2 2 0 0 0-2-2z" />
+              </svg>
             </div>
-            <h1 className="text-2xl font-bold bg-linear-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
               RecipeHub
             </h1>
           </Link>

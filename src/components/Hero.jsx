@@ -28,7 +28,7 @@ const HeroSection = () => {
 
           <button
             onClick={() => router.push("/browse-recipes")}
-            className="mt-8 px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white hover:shadow-cyan-500/30"
+            className="mt-8 px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white hover:shadow-cyan-500/20 cursor-pointer"
           >
             Explore Recipes
           </button>

@@ -26,7 +26,9 @@ export default async function Home() {
       <section className="py-16 px-4 md:px-10 max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col gap-2 border-b border-slate-100 pb-6 dark:border-zinc-800">
           <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white">
-            Featured Editorials
+            <span className="bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
+              Featured Editorials
+            </span>
           </h2>
           <p className="text-slate-500 dark:text-slate-400">
             Curated selections from our expert culinary community.
@@ -48,7 +50,9 @@ export default async function Home() {
       <section className="py-16 px-4 md:px-10 max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col gap-2 border-b border-slate-100 pb-6 dark:border-zinc-800">
           <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white">
-            Popular Recipes
+            <span className="bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
+              Popular Recipes
+            </span>
           </h2>
           <p className="text-slate-500 dark:text-slate-400">
             The highest liked recipes across our platform.
