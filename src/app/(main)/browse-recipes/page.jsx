@@ -6,6 +6,8 @@ import Pagination from "@/components/Pagination";
 
 const AVAILABLE_CATEGORIES = [
   "Breakfast",
+  "Lunch",
+  "Dinner",
   "Salad",
   "Fast Food",
   "Noodles",

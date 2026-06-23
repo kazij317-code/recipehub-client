@@ -1,6 +1,7 @@
 import React from "react";
 import HeroSection from "@/components/Hero";
 import RecipeCard from "@/components/RecipeCard";
+import ExtraHomeSections from "@/components/ExtraHomeSections";
 import { fetchAllRecipes } from "@/lib/actions/recipe";
 import Link from "next/link";
 import { Heart } from "lucide-react";
@@ -107,6 +108,9 @@ export default async function Home() {
           })}
         </div>
       </section>
+
+      {/* Extra Home Sections */}
+      <ExtraHomeSections />
     </>
   );
 }
