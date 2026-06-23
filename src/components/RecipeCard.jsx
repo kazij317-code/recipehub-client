@@ -40,6 +40,11 @@ const RecipeCard = ({ recipe, isOwner = false }) => {
         <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 shadow-md dark:bg-zinc-900/95 dark:text-slate-200">
           {categoryLabel}
         </span>
+        {recipe.isFeatured && (
+          <span className="absolute right-4 top-4 rounded-full bg-slate-900/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.15em] text-white shadow-md dark:bg-zinc-800/90">
+            Featured
+          </span>
+        )}
       </Link>
 
       <div className="space-y-4 p-6">
@@ -71,7 +76,7 @@ const RecipeCard = ({ recipe, isOwner = false }) => {
               href={detailUrl}
               className="font-medium text-cyan-600 hover:text-cyan-500 dark:text-cyan-300"
             >
-              View
+              View Details
             </Link>
             {isOwner && (
               <RecipeCardActions

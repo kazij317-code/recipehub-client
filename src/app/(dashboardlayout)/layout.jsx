@@ -1,10 +1,20 @@
 import React from "react";
+import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import NextThemeProvider from "@/providers/NextThemeProvider";
 import { Toaster } from "react-hot-toast";
 import DashboardSidebar from "@/components/DashboardSidebar";
+import { getUserSession } from "@/lib/session/session";
+import { headers } from "next/headers";
 
-const Layout = ({ children }) => {
+const Layout = async ({ children }) => {
+  const user = await getUserSession();
+  if (!user) {
+    const headersList = await headers();
+    const pathname = headersList.get("x-pathname") || "/dashboard";
+    redirect(`/login?redirectTo=${encodeURIComponent(pathname)}`);
+  }
+
   return (
     <>
       <NextThemeProvider>

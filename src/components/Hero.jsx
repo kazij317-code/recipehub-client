@@ -14,7 +14,7 @@ const HeroSection = () => {
             className="text-4xl md:text-6xl font-bold leading-tight text-gray-800 dark:text-white"
           >
             Discover & Share{" "}
-            <span className="bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
               Delicious Recipes
             </span>{" "}
           </h1>
@@ -27,7 +27,7 @@ const HeroSection = () => {
           </p>
 
           <button
-            onClick={() => router.push("/recipes")}
+            onClick={() => router.push("/browse-recipes")}
             className="mt-8 px-8 py-3 rounded-lg text-lg font-semibold shadow-md transition-all duration-300 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white hover:shadow-cyan-500/30"
           >
             Explore Recipes
@@ -37,9 +37,9 @@ const HeroSection = () => {
         <div className="flex-1 flex justify-center">
           <div className="relative max-w-full">
             <img
-              src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg"
+              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1000&auto=format&fit=crop&q=80"
               alt="Recipe Hero"
-              className="w-full h-full object-cover rounded-2xl shadow-xl"
+              className="w-full h-[450px] object-cover rounded-[32px] shadow-2xl transition duration-500 hover:scale-[1.02]"
             />
           </div>
         </div>
