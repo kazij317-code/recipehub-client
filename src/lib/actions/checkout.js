@@ -3,6 +3,8 @@
 import { headers } from "next/headers";
 import { auth } from "../auth";
 import Stripe from "stripe";
+import { getDb } from "../db";
+import { ObjectId } from "mongodb";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -56,6 +58,23 @@ export async function createRecipeCheckoutAction(recipeId) {
 
   if (!recipeId) {
     throw new Error("Recipe ID is required");
+  }
+
+  // Check if already purchased to prevent double-purchasing
+  const db = await getDb();
+  const purchasesCollection = db.collection("purchases");
+  const possibleIds = [recipeId];
+  try {
+    possibleIds.push(new ObjectId(recipeId));
+  } catch (e) {}
+
+  const existing = await purchasesCollection.findOne({
+    userEmail: session.user.email,
+    recipeId: { $in: possibleIds },
+  });
+
+  if (existing) {
+    throw new Error("You have already purchased this recipe.");
   }
 
   try {

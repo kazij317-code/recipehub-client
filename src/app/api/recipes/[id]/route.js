@@ -46,8 +46,29 @@ export async function GET(request, { params }) {
       }
     }
 
+    const isOwner = session?.user?.email && recipe.userEmail === session.user.email;
+    const isPremium = session?.user?.plan === "premium" || session?.user?.isPremium;
+
+    let isPurchased = false;
+    if (session?.user?.email) {
+      const purchasesCollection = db.collection("purchases");
+      const possibleIds = [recipeId];
+      try {
+        possibleIds.push(new ObjectId(recipeId));
+      } catch (e) { }
+      if (recipe?._id) possibleIds.push(recipe._id);
+      if (recipe?.id) possibleIds.push(recipe.id);
+
+      const purchase = await purchasesCollection.findOne({
+        userEmail: session.user.email,
+        recipeId: { $in: possibleIds },
+      });
+      isPurchased = !!purchase;
+    }
+
     // Recipes are always unlocked
     recipe.isLocked = false;
+    recipe.isPurchased = !!isPurchased;
 
     return NextResponse.json({ data: recipe, status: true });
   } catch (error) {
