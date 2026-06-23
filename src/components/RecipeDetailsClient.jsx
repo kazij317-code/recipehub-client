@@ -321,15 +321,13 @@ const RecipeDetailsClient = ({ fallbackId }) => {
                   {isSaved ? "Saved" : "Save to Favorites"}
                 </div>
               </button>
-              {recipe.isLocked && (
-                <button
-                  onClick={handlePurchase}
-                  disabled={purchaseLoading}
-                  className="w-full rounded-3xl bg-slate-900 px-4 py-3 text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 disabled:opacity-50"
-                >
-                  {purchaseLoading ? "Redirecting..." : "Purchase Details"}
-                </button>
-              )}
+              <button
+                onClick={handlePurchase}
+                disabled={purchaseLoading}
+                className="w-full rounded-3xl bg-slate-900 px-4 py-3 text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 disabled:opacity-50"
+              >
+                {purchaseLoading ? "Redirecting..." : "Purchase Details"}
+              </button>
             </div>
             <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-zinc-800 dark:text-slate-400">
               {user?.email ? (

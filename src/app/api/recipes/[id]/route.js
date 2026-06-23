@@ -46,29 +46,8 @@ export async function GET(request, { params }) {
       }
     }
 
-    // Lock/Unlock check
-    const isOwner = session?.user?.email && recipe.userEmail === session.user.email;
-    const isPremium = session?.user?.plan === "premium" || session?.user?.isPremium;
-
-    let isPurchased = false;
-    if (session?.user?.email) {
-      const purchasesCollection = db.collection("purchases");
-      const purchase = await purchasesCollection.findOne({
-        userEmail: session.user.email,
-        recipeId: recipeId,
-      });
-      isPurchased = !!purchase;
-    }
-
-    const isUnlocked = isOwner || isPremium || isPurchased;
-
-    if (!isUnlocked) {
-      recipe.ingredients = [];
-      recipe.instructions = [];
-      recipe.isLocked = true;
-    } else {
-      recipe.isLocked = false;
-    }
+    // Recipes are always unlocked
+    recipe.isLocked = false;
 
     return NextResponse.json({ data: recipe, status: true });
   } catch (error) {
