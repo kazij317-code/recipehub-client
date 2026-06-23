@@ -27,9 +27,7 @@ const RecipeCard = ({ recipe, isOwner = false }) => {
     return null;
   }
 
-  const detailUrl = isLoggedIn
-    ? `/browse-recipes/${recipeId}`
-    : `/login?redirectTo=/browse-recipes/${recipeId}`;
+  const detailUrl = `/browse-recipes/${recipeId}`;
 
   return (
     <div className="group overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-950">

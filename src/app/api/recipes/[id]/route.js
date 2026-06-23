@@ -49,7 +49,7 @@ export async function GET(request, { params }) {
     // Lock/Unlock check
     const isOwner = session?.user?.email && recipe.userEmail === session.user.email;
     const isPremium = session?.user?.plan === "premium" || session?.user?.isPremium;
-    
+
     let isPurchased = false;
     if (session?.user?.email) {
       const purchasesCollection = db.collection("purchases");
