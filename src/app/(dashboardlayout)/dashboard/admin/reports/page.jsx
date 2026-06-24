@@ -96,31 +96,28 @@ const AdminReportsPage = () => {
         <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900">
           <button
             onClick={() => setActiveTab("pending")}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
-              activeTab === "pending"
+            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${activeTab === "pending"
                 ? "bg-orange-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-            }`}
+              }`}
           >
             Pending
           </button>
           <button
             onClick={() => setActiveTab("dismissed")}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
-              activeTab === "dismissed"
+            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${activeTab === "dismissed"
                 ? "bg-orange-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-            }`}
+              }`}
           >
             Dismissed
           </button>
           <button
             onClick={() => setActiveTab("all")}
-            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${
-              activeTab === "all"
+            className={`rounded-full px-4 py-1.5 text-xs font-semibold transition ${activeTab === "all"
                 ? "bg-orange-600 text-white shadow-xs"
                 : "text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
-            }`}
+              }`}
           >
             All
           </button>
@@ -139,7 +136,7 @@ const AdminReportsPage = () => {
             <thead>
               <tr className="border-b border-slate-200 bg-slate-50 dark:border-zinc-800 dark:bg-zinc-800/50">
                 <th className="px-6 py-4 text-left font-medium text-xs uppercase tracking-wider text-slate-400">
-                  Recipe ID
+                  Recipe
                 </th>
                 <th className="px-6 py-4 text-left font-medium text-xs uppercase tracking-wider text-slate-400">
                   Reporter
@@ -171,9 +168,29 @@ const AdminReportsPage = () => {
                     key={r._id || index}
                     className="transition hover:bg-slate-50/50 dark:hover:bg-zinc-800/20"
                   >
-                    {/* Truncated Recipe ID */}
-                    <td className="px-6 py-4 font-mono text-xs text-slate-600 dark:text-slate-300">
-                      {truncatedId}
+                    {/* Recipe Column: Image + Name */}
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        {r.recipeImage ? (
+                          <img
+                            src={r.recipeImage}
+                            alt={r.recipeName}
+                            className="w-10 h-10 object-cover rounded-lg border border-slate-200 dark:border-zinc-800"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 bg-slate-100 dark:bg-zinc-800 rounded-lg flex items-center justify-center text-xs text-slate-400">
+                            🍳
+                          </div>
+                        )}
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-slate-800 dark:text-slate-200 text-sm">
+                            {r.recipeName}
+                          </span>
+                          <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">
+                            ID: {truncatedId}
+                          </span>
+                        </div>
+                      </div>
                     </td>
 
                     {/* Reporter */}

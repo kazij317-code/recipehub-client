@@ -270,7 +270,7 @@ export const fetchAllReportsAdmin = async () => {
   await verifyAdmin();
   const db = await getDb();
   await seedMockDataIfNeeded(db);
-  
+
   const reports = await db.collection("recipeReports").find({
     reporterEmail: { $nin: ["a@gmail.com", "a@b.com"] }
   }).sort({ createdAt: -1 }).toArray();
@@ -296,6 +296,7 @@ export const fetchAllReportsAdmin = async () => {
       ...r,
       _id: r._id.toString(),
       recipeName: recipe?.recipeName || "Unknown Recipe",
+      recipeImage: recipe?.recipeImage || "",
     };
   });
 };
@@ -324,7 +325,7 @@ export const reportRecipeIssue = async (recipeId, userEmail, reason, description
   }
 
   const db = await getDb();
-  
+
   // Prevent duplicate reports by the same user
   const existingReport = await db.collection("recipeReports").findOne({
     recipeId,
