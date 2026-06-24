@@ -49,35 +49,35 @@ export default function ReportRecipeModal({ recipeId, recipeName, userEmail, onS
       <Modal.Backdrop className="bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm">
         <Modal.Container placement="auto">
           {/* Modal.Dialog renders the overlay box */}
-          <Modal.Dialog className="w-full max-w-md bg-white dark:bg-[#0f1319] border border-slate-200 dark:border-slate-800/80 rounded-[2rem] shadow-2xl p-6 text-left transition-colors overflow-hidden relative">
+          <Modal.Dialog className="w-full max-w-[350px] bg-white dark:bg-[#0f1319] border border-slate-200 dark:border-slate-800/80 rounded-[1.25rem] shadow-2xl p-4 text-left transition-colors overflow-y-auto max-h-[90vh] relative">
             
             {/* Custom Close Button */}
-            <Modal.CloseTrigger className="absolute right-6 top-6 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
+            <Modal.CloseTrigger className="absolute right-5 top-5 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer">
               <X className="w-5 h-5" />
             </Modal.CloseTrigger>
 
             {/* Header */}
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-2">
               <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400">
                 <AlertTriangle className="w-5 h-5" />
               </div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+              <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                 Report Recipe
               </h2>
             </div>
 
             {/* Reporting Recipe Info */}
-            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">
               Reporting: <span className="font-bold text-slate-900 dark:text-white">{recipeName}</span>
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-3">
               {/* Reason Selector */}
               <div>
-                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-3">
+                <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
                   Reason <span className="text-red-500">*</span>
                 </label>
-                <div className="space-y-3">
+                <div className="space-y-1.5">
                   {[
                     { id: "Spam", label: "Spam" },
                     { id: "Offensive Content", label: "Offensive Content" },
@@ -86,24 +86,24 @@ export default function ReportRecipeModal({ recipeId, recipeName, userEmail, onS
                     <div
                       key={option.id}
                       onClick={() => setReason(option.id)}
-                      className={`border rounded-2xl p-4 flex items-center gap-3 cursor-pointer transition-all ${
+                      className={`border rounded-xl py-2 px-3 flex items-center gap-2 cursor-pointer transition-all ${
                         reason === option.id
                           ? "border-red-600 bg-red-50/50 dark:bg-red-950/20"
                           : "border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900/50"
                       }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
+                        className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
                           reason === option.id
                             ? "border-red-600"
                             : "border-slate-300 dark:border-zinc-700"
                         }`}
                       >
                         {reason === option.id && (
-                          <div className="w-2.5 h-2.5 rounded-full bg-red-600" />
+                          <div className="w-2 h-2 rounded-full bg-red-600" />
                         )}
                       </div>
-                      <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                      <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
                         {option.label}
                       </span>
                     </div>
@@ -113,22 +113,22 @@ export default function ReportRecipeModal({ recipeId, recipeName, userEmail, onS
 
               {/* Additional Details */}
               <div>
-                <label className="block text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">
+                <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
                   Additional Details (optional)
                 </label>
                 <textarea
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
                   placeholder="Provide more context..."
-                  className="w-full border border-slate-200 dark:border-zinc-800 rounded-2xl p-4 text-sm bg-transparent text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-red-500 focus:border-red-500 outline-none resize-none h-28 transition-colors"
+                  className="w-full border border-slate-200 dark:border-zinc-800 rounded-xl p-2.5 text-xs bg-transparent text-slate-800 dark:text-slate-200 focus:ring-1 focus:ring-red-500 focus:border-red-500 outline-none resize-none h-16 transition-colors"
                 />
               </div>
 
               {/* Footer / Actions */}
-              <div className="flex gap-4 pt-2">
+              <div className="flex gap-3 pt-2">
                 <Button 
                   slot="close" 
-                  className="flex-1 border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900/50 rounded-2xl py-6 font-semibold text-slate-700 dark:text-slate-200 bg-transparent text-center text-sm transition-colors cursor-pointer"
+                  className="flex-1 h-10 border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-900/50 rounded-xl font-bold text-slate-700 dark:text-slate-200 bg-transparent text-center text-xs transition-colors cursor-pointer"
                 >
                   Cancel
                 </Button>
@@ -137,7 +137,7 @@ export default function ReportRecipeModal({ recipeId, recipeName, userEmail, onS
                   type="submit"
                   slot="close"
                   isLoading={loading}
-                  className="flex-1 bg-red-700 hover:bg-red-800 disabled:bg-red-700/50 rounded-2xl py-6 font-semibold text-white text-center text-sm transition-colors cursor-pointer"
+                  className="flex-1 h-10 bg-red-700 hover:bg-red-800 disabled:bg-red-700/50 rounded-xl font-bold text-white text-center text-xs transition-colors cursor-pointer"
                 >
                   Submit Report
                 </Button>
