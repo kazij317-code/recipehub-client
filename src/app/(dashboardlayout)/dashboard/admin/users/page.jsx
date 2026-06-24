@@ -201,9 +201,11 @@ const ManageUsersPage = () => {
                   <td className="px-6 py-4">
                     <button
                       onClick={() => handleToggleBlock(u._id, u.status)}
-                      disabled={actionUserId === u._id}
+                      disabled={actionUserId === u._id || u.role === "admin"}
                       className={`w-20 rounded-lg py-1.5 text-xs font-bold border transition ${
-                        isBlocked
+                        u.role === "admin"
+                          ? "bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-500"
+                          : isBlocked
                           ? "bg-emerald-50 border-emerald-100 hover:bg-emerald-100 text-emerald-600 dark:bg-emerald-950/20 dark:border-emerald-900/30 dark:text-emerald-400"
                           : "bg-rose-50 border-rose-100 hover:bg-rose-100 text-rose-600 dark:bg-rose-950/20 dark:border-rose-900/30 dark:text-rose-400"
                       }`}

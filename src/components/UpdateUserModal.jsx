@@ -66,11 +66,7 @@ export function UpdateUserModal() {
                     </Label>
                     <Input 
                       placeholder="Enter your name"
-                       
-                      classNames={{
-                        inputWrapper: "bg-slate-50/50 dark:bg-[#0b0f17]/50 border border-slate-200 dark:border-slate-800 h-12 rounded-xl focus-within:!border-blue-600 dark:focus-within:!border-purple-500 transition-colors",
-                        input: "text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm font-medium",
-                      }}
+                      className="w-full bg-slate-50/50 dark:bg-[#0b0f17]/50 border border-slate-200 dark:border-slate-800 h-12 rounded-xl focus:border-blue-600 dark:focus:border-purple-500 transition-colors text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm font-medium px-4 outline-none"
                     />
                   </TextField>
 
@@ -81,10 +77,7 @@ export function UpdateUserModal() {
                     </Label>
                     <Input 
                       placeholder="https://example.com/avatar.jpg" 
-                      classNames={{
-                        inputWrapper: "bg-slate-50/50 dark:bg-[#0b0f17]/50 border border-slate-200 dark:border-slate-800 h-12 rounded-xl focus-within:!border-blue-600 dark:focus-within:!border-purple-500 transition-colors",
-                        input: "text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm font-medium",
-                      }}
+                      className="w-full bg-slate-50/50 dark:bg-[#0b0f17]/50 border border-slate-200 dark:border-slate-800 h-12 rounded-xl focus:border-blue-600 dark:focus:border-purple-500 transition-colors text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm font-medium px-4 outline-none"
                     />
                   </TextField>
 

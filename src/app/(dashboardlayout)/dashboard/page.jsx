@@ -76,7 +76,7 @@ const DashboardPage = async () => {
           <div className="mb-8 flex items-center justify-between">
             <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300">
               {/* Saved Favorites */}
-              Total Saved Recipes
+              Total Saved Favorite Recipes
             </h3>
             <div className="rounded-lg bg-slate-100 p-2 dark:bg-zinc-800">
               <Bookmark className="h-5 w-5 text-slate-600 dark:text-slate-400" />
