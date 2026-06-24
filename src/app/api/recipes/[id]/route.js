@@ -47,7 +47,7 @@ export async function GET(request, { params }) {
     }
 
     const isOwner = session?.user?.email && recipe.userEmail === session.user.email;
-    const isPremium = session?.user?.plan === "premium" || session?.user?.isPremium;
+    const isPremium = session?.user?.plan === "premium" || session?.user?.isPremium || session?.user?.role === "admin";
 
     let isPurchased = false;
     let isLiked = false;
@@ -83,8 +83,9 @@ export async function GET(request, { params }) {
       isReported = !!existingReport;
     }
 
-    // Recipes are always unlocked
-    recipe.isLocked = false;
+    // Determine lock status based on DB configuration and ownership/purchase status
+    const dbLocked = !!recipe.isLocked;
+    recipe.isLocked = dbLocked && !isOwner && !isPurchased && !isPremium;
     recipe.isPurchased = !!isPurchased;
     recipe.isLiked = isLiked;
     recipe.isReported = isReported;

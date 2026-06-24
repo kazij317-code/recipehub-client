@@ -137,6 +137,8 @@ const RecipeDetailsClient = ({ fallbackId }) => {
     ? recipe.userEmail.split("@")[0]
     : "Anonymous";
 
+  const isOwner = user?.email && recipe?.userEmail === user.email;
+
   const ingredients = Array.isArray(recipe.ingredients)
     ? recipe.ingredients
     : typeof recipe.ingredients === "string"
@@ -336,45 +338,49 @@ const RecipeDetailsClient = ({ fallbackId }) => {
                   {isSaved ? "Saved" : "Save to Favorites"}
                 </div>
               </button>
-              <button
-                onClick={handlePurchase}
-                disabled={purchaseLoading || recipe.isPurchased}
-                className="w-full rounded-3xl bg-slate-900 px-4 py-3 text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 disabled:opacity-50"
-              >
-                {purchaseLoading ? "Redirecting..." : recipe.isPurchased ? "Purchased" : "Purchase Details"}
-              </button>
-            </div>
-            <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-zinc-800 dark:text-slate-400">
-              {user?.email ? (
-                recipe.isReported ? (
-                  <button
-                    disabled
-                    className="flex items-center gap-2 text-left text-slate-400 dark:text-slate-500 font-medium bg-transparent p-0 h-auto min-w-0 shadow-none border-none cursor-not-allowed"
-                  >
-                    Reported
-                  </button>
-                ) : (
-                  <ReportRecipeModal
-                    recipeId={recipeId}
-                    recipeName={recipe.recipeName}
-                    userEmail={user.email}
-                    onSuccess={() => {
-                      setRecipe((prev) => ({
-                        ...prev,
-                        isReported: true,
-                      }));
-                    }}
-                  />
-                )
-              ) : (
+              {!isOwner && (
                 <button
-                  onClick={() => toast.error("You must be signed in to report an issue.")}
-                  className="flex items-center gap-2 text-left text-slate-700 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 font-medium cursor-pointer"
+                  onClick={handlePurchase}
+                  disabled={purchaseLoading || recipe.isPurchased}
+                  className="w-full rounded-3xl bg-slate-900 px-4 py-3 text-white transition hover:bg-slate-800 dark:bg-white dark:text-slate-950 disabled:opacity-50"
                 >
-                  Report Issue
+                  {purchaseLoading ? "Redirecting..." : recipe.isPurchased ? "Purchased" : "Purchase Details"}
                 </button>
               )}
             </div>
+            {!isOwner && (
+              <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-zinc-800 dark:text-slate-400">
+                {user?.email ? (
+                  recipe.isReported ? (
+                    <button
+                      disabled
+                      className="flex items-center gap-2 text-left text-slate-400 dark:text-slate-500 font-medium bg-transparent p-0 h-auto min-w-0 shadow-none border-none cursor-not-allowed"
+                    >
+                      Reported
+                    </button>
+                  ) : (
+                    <ReportRecipeModal
+                      recipeId={recipeId}
+                      recipeName={recipe.recipeName}
+                      userEmail={user.email}
+                      onSuccess={() => {
+                        setRecipe((prev) => ({
+                          ...prev,
+                          isReported: true,
+                        }));
+                      }}
+                    />
+                  )
+                ) : (
+                  <button
+                    onClick={() => toast.error("You must be signed in to report an issue.")}
+                    className="flex items-center gap-2 text-left text-slate-700 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400 font-medium cursor-pointer"
+                  >
+                    Report Issue
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">

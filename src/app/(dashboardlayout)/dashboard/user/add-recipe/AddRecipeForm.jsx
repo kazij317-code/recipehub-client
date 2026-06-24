@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Crown, Upload, Trash2, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-import { addRecipe, updateuserAddrecipeLimit } from "@/lib/actions/recipe";
+import { addRecipe, updateuserAddrecipeLimit, fetchRecipeById, updateRecipe } from "@/lib/actions/recipe";
 
 export default function AddRecipeForm({ user }) {
   // 2. Loading states
@@ -15,6 +15,9 @@ export default function AddRecipeForm({ user }) {
   const [recipeName, setRecipeName] = useState("");
   const [cuisineType, setCuisineType] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get("edit");
+  const [recipeToEdit, setRecipeToEdit] = useState(null);
   const [category, setCategory] = useState("");
   const [difficulty, setDifficulty] = useState("Easy");
   const [prepTime, setPrepTime] = useState("");
@@ -37,8 +40,38 @@ export default function AddRecipeForm({ user }) {
     "Other",
   ];
 
-  // 4. Free limit logic
-  const hasReachedLimit = !user.isPremium && user.totalRecipesCreated >= 2;
+  // 4. Free limit logic (only apply to new creations, not edits)
+  const hasReachedLimit = !editId && !user.isPremium && user.totalRecipesCreated >= 2;
+
+  useEffect(() => {
+    if (!editId) return;
+
+    const loadRecipe = async () => {
+      setLoading(true);
+      try {
+        const res = await fetchRecipeById(editId);
+        if (res?.data) {
+          const r = res.data;
+          setRecipeToEdit(r);
+          setRecipeName(r.recipeName || "");
+          setCuisineType(r.cuisineType || "");
+          setCategory(r.category || "");
+          setDifficulty(r.difficultyLevel || "Easy");
+          setPrepTime(r.preparationTime || "");
+          setRecipeImage(r.recipeImage || "");
+          setIngredients(Array.isArray(r.ingredients) ? r.ingredients.join("\n") : "");
+          setInstructions(Array.isArray(r.instructions) ? r.instructions.join("\n") : "");
+        }
+      } catch (err) {
+        console.error("Failed to load recipe for editing:", err);
+        toast.error("Failed to load recipe details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRecipe();
+  }, [editId]);
 
   // --- ImgBB Image Upload Handler ---
   const handleImageUpload = async (event) => {
@@ -105,17 +138,26 @@ export default function AddRecipeForm({ user }) {
         .split("\n")
         .map((item) => item.trim())
         .filter(Boolean),
-      likesCount: 0,
-      isFeatured: false,
-      status: "published",
     };
 
     try {
-      const res = await addRecipe(finalRecipeData);
-      if (res?.status === true) {
-        toast.success(`${res.message}`);
+      let res;
+      if (editId) {
+        finalRecipeData.likesCount = recipeToEdit?.likesCount ?? 0;
+        finalRecipeData.isFeatured = recipeToEdit?.isFeatured ?? false;
+        finalRecipeData.status = recipeToEdit?.status ?? "published";
+        res = await updateRecipe(editId, finalRecipeData);
+      } else {
+        finalRecipeData.likesCount = 0;
+        finalRecipeData.isFeatured = false;
+        finalRecipeData.status = "published";
+        res = await addRecipe(finalRecipeData);
+      }
 
-        if (user?.limit < 2) {
+      if (res?.status === true) {
+        toast.success(res.message || (editId ? "Recipe updated!" : "Recipe added!"));
+
+        if (!editId && user?.limit < 2) {
           try {
             await updateuserAddrecipeLimit(user?.id);
           } catch (limitErr) {
@@ -165,18 +207,20 @@ export default function AddRecipeForm({ user }) {
             <div className="flex items-center justify-between mb-8 border-b border-slate-100 dark:border-zinc-800 pb-4">
               <div>
                 <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                  Add{" "}
+                  {editId ? "Edit " : "Add "}
                   <span className="bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
-                    New Recipe
+                    {editId ? "Recipe" : "New Recipe"}
                   </span>{" "}
                 </h1>
                 <p className="text-sm text-slate-500 dark:text-zinc-400">
-                  Share your culinary creation with the world
+                  {editId ? "Update your recipe details below" : "Share your culinary creation with the world"}
                 </p>
               </div>
-              <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
-                Slots Remaining: {2 - user.totalRecipesCreated}
-              </span>
+              {!editId && (
+                <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
+                  Slots Remaining: {2 - user.totalRecipesCreated}
+                </span>
+              )}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -356,7 +400,7 @@ export default function AddRecipeForm({ user }) {
                   disabled={loading || imageUploading}
                   className="w-full sm:w-auto px-5 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold rounded-xl transition disabled:opacity-50 shadow-md"
                 >
-                  {loading ? "Saving..." : "Submit Recipe"}
+                  {loading ? "Saving..." : editId ? "Update Recipe" : "Submit Recipe"}
                 </button>
               </div>
             </form>

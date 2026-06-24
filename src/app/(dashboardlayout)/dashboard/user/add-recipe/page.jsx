@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import AddRecipeForm from "./AddRecipeForm";
 import { getUserSession } from "@/lib/session/session";
 import { fetchUserRecipes } from "@/lib/actions/recipe";
@@ -16,7 +16,13 @@ const AddRecipePage = async () => {
 
   return (
     <div>
-      {user ? <AddRecipeForm user={user} /> : <p className="text-center p-10">Please log in to add a recipe.</p>}
+      {user ? (
+        <Suspense fallback={<p className="text-center p-10">Loading form...</p>}>
+          <AddRecipeForm user={user} />
+        </Suspense>
+      ) : (
+        <p className="text-center p-10">Please log in to add a recipe.</p>
+      )}
     </div>
   );
 };
