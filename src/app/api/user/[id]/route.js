@@ -3,7 +3,9 @@ import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 
 export async function PATCH(request, { params }) {
-  const session = await auth.api.getSession({ request });
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
   
   if (!session || !session.user) {
     return NextResponse.json(

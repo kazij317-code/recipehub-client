@@ -14,7 +14,9 @@ export async function GET(request, { params }) {
     );
   }
 
-  const session = await auth.api.getSession({ request });
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
   const db = await getDb();
   const recipesCollection = db.collection("recipes");
 
@@ -59,8 +61,14 @@ export async function GET(request, { params }) {
       try {
         possibleIds.push(new ObjectId(recipeId));
       } catch (e) { }
-      if (recipe?._id) possibleIds.push(recipe._id);
-      if (recipe?.id) possibleIds.push(recipe.id);
+      if (recipe?._id) {
+        possibleIds.push(recipe._id);
+        possibleIds.push(recipe._id.toString());
+      }
+      if (recipe?.id) {
+        possibleIds.push(recipe.id);
+        possibleIds.push(recipe.id.toString());
+      }
 
       const purchase = await purchasesCollection.findOne({
         userEmail: session.user.email,

@@ -109,11 +109,11 @@ export const likeRecipe = async (id) => {
   const userEmail = user?.email;
 
   if (!userEmail) {
-    throw new Error("Unauthorized. Please log in.");
+    return { success: false, error: "Unauthorized. Please log in." };
   }
 
   if (!id) {
-    throw new Error("Recipe id is required.");
+    return { success: false, error: "Recipe id is required." };
   }
 
   const db = await getDb();

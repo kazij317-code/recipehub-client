@@ -152,11 +152,21 @@ const RecipeDetailsClient = ({ fallbackId }) => {
       : [];
 
   const handleLike = async () => {
+    if (!user) {
+      toast.error("You must be signed in to like a recipe.");
+      return;
+    }
+
     try {
       const response = await likeRecipe(recipeId);
+      if (response && response.error) {
+        toast.error(response.error);
+        return;
+      }
       setRecipe((prev) => ({
         ...prev,
         likesCount: response?.data?.likesCount ?? (prev?.likesCount ?? 0) + 1,
+        isLiked: true,
       }));
       toast.success("Recipe liked!");
     } catch (error) {
