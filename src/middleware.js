@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function middleware(request) {
   const sessionToken = request.cookies.get("better-auth.session_token") || 
-                       request.cookies.get("__secure-better-auth.session_token");
+                       request.cookies.get("__Secure-better-auth.session_token");
   const path = request.nextUrl.pathname;
 
   if (path.startsWith("/dashboard") && !sessionToken) {
