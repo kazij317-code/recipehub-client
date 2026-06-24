@@ -330,6 +330,7 @@ export const reportRecipeIssue = async (recipeId, userEmail, reason, description
   const existingReport = await db.collection("recipeReports").findOne({
     recipeId,
     reporterEmail: userEmail,
+    status: { $ne: "resolved" },
   });
 
   if (existingReport) {

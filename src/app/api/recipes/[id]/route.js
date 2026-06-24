@@ -87,6 +87,7 @@ export async function GET(request, { params }) {
       const existingReport = await db.collection("recipeReports").findOne({
         reporterEmail: session.user.email,
         recipeId: { $in: possibleIds },
+        status: { $ne: "resolved" },
       });
       isReported = !!existingReport;
     }
