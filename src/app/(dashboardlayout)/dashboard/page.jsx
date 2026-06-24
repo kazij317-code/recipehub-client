@@ -36,7 +36,7 @@ const DashboardPage = async () => {
             Overview
           </h1>
           <p className="text-slate-600 dark:text-slate-400">
-            Welcome back, <span className="font-bold text-2xl">{userName}</span>. Here is your command center.
+            Welcome back, <span className="font-bold text-xl">{userName}</span>. Here is your command center.
           </p>
         </div>
         {/* <Link
@@ -53,7 +53,8 @@ const DashboardPage = async () => {
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="mb-8 flex items-center justify-between">
             <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300">
-              Published Recipes
+              {/* Published Recipes */}
+              Toral My Recipes
             </h3>
             <div className="rounded-lg bg-slate-100 p-2 dark:bg-zinc-800">
               <FileText className="h-5 w-5 text-slate-600 dark:text-slate-400" />
@@ -74,7 +75,8 @@ const DashboardPage = async () => {
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <div className="mb-8 flex items-center justify-between">
             <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300">
-              Saved Favorites
+              {/* Saved Favorites */}
+              Total Saved Recipes
             </h3>
             <div className="rounded-lg bg-slate-100 p-2 dark:bg-zinc-800">
               <Bookmark className="h-5 w-5 text-slate-600 dark:text-slate-400" />
@@ -106,7 +108,7 @@ const DashboardPage = async () => {
             {totalEngagement}
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Across all recipes
+            Across all my recipes
           </p>
         </div>
       </div>
