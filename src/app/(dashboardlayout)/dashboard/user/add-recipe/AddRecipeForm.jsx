@@ -278,6 +278,12 @@ export default function AddRecipeForm({ user }) {
                     <option value="Lunch">Lunch</option>
                     <option value="Dinner">Dinner</option>
                     <option value="Dessert">Dessert</option>
+                    <option value="Salad">Salad</option>
+                    <option value="Fastfood">Fastfood</option>
+                    <option value="Noodles">Noodles</option>
+                    <option value="Seafood">Seafood</option>
+                    <option value="Piza">Piza</option>
+                    <option value="Pasta">Pasta</option>
                   </select>
                 </div>
                 <div>

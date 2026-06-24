@@ -54,15 +54,15 @@ const Footer = () => {
           <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
             <li className="flex items-center gap-2.5">
               <Mail className="h-4 w-4 text-cyan-500 shrink-0" />
-              <span className="truncate">support@recipehub.com</span>
+              <span className="truncate">mithu00781@rgmail.com</span>
             </li>
             <li className="flex items-center gap-2.5">
               <Phone className="h-4 w-4 text-cyan-500 shrink-0" />
-              <span>+1 (555) 019-2834</span>
+              <span>+8801712736526</span>
             </li>
             <li className="flex items-center gap-2.5">
               <MapPin className="h-4 w-4 text-cyan-500 shrink-0" />
-              <span>123 Culinary Blvd, Food City</span>
+              <span>Rayerbag, Dhaka</span>
             </li>
           </ul>
         </div>

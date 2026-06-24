@@ -343,9 +343,12 @@ const RecipeDetailsClient = ({ fallbackId }) => {
             <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-zinc-800 dark:text-slate-400">
               {user?.email ? (
                 recipe.isReported ? (
-                  <span className="font-semibold text-rose-600 dark:text-rose-400">
+                  <button
+                    disabled
+                    className="flex items-center gap-2 text-left text-slate-400 dark:text-slate-500 font-medium bg-transparent p-0 h-auto min-w-0 shadow-none border-none cursor-not-allowed"
+                  >
                     Reported
-                  </span>
+                  </button>
                 ) : (
                   <ReportRecipeModal
                     recipeId={recipeId}
