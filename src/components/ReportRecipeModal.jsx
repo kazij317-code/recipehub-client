@@ -20,7 +20,11 @@ export default function ReportRecipeModal({ recipeId, recipeName, userEmail, onS
 
     setLoading(true);
     try {
-      await reportRecipeIssue(recipeId, userEmail, reason, details || "—");
+      const result = await reportRecipeIssue(recipeId, userEmail, reason, details || "—");
+      if (result && !result.success) {
+        toast.error(result.error || "Failed to submit report.");
+        return;
+      }
       toast.success("Thank you for your report. Admin will review it.");
       setDetails("");
       setReason("Spam");

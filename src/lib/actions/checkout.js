@@ -74,7 +74,7 @@ export async function createRecipeCheckoutAction(recipeId) {
   });
 
   if (existing) {
-    throw new Error("You have already purchased this recipe.");
+    return { success: false, error: "You have already purchased this recipe." };
   }
 
   try {
@@ -98,10 +98,10 @@ export async function createRecipeCheckoutAction(recipeId) {
       },
     });
 
-    return { url: checkoutSession.url };
+    return { success: true, url: checkoutSession.url };
   } catch (error) {
     console.error("Stripe error in recipe checkout action:", error);
-    throw new Error(error.message || "Failed to create recipe checkout session");
+    return { success: false, error: error.message || "Failed to create recipe checkout session" };
   }
 }
 

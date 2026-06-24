@@ -193,8 +193,12 @@ const RecipeDetailsClient = ({ fallbackId }) => {
     setPurchaseLoading(true);
     try {
       const result = await createRecipeCheckoutAction(recipeId);
-      if (result?.url) {
+      if (result?.success && result?.url) {
         window.location.href = result.url;
+        return;
+      }
+      if (result?.error) {
+        toast.error(result.error);
         return;
       }
       throw new Error("Could not initiate purchase checkout");

@@ -320,7 +320,7 @@ export const resolveReportAdmin = async (reportId, actionType) => {
 export const reportRecipeIssue = async (recipeId, userEmail, reason, description) => {
   const user = await getUserSession();
   if (!user) {
-    throw new Error("Unauthorized. Please log in.");
+    return { success: false, error: "Unauthorized. Please log in." };
   }
 
   const db = await getDb();
@@ -332,7 +332,7 @@ export const reportRecipeIssue = async (recipeId, userEmail, reason, description
   });
 
   if (existingReport) {
-    throw new Error("You have already reported this recipe.");
+    return { success: false, error: "You have already reported this recipe." };
   }
 
   const report = {
