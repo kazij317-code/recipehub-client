@@ -216,11 +216,11 @@ export default function AddRecipeForm({ user }) {
                   {editId ? "Update your recipe details below" : "Share your culinary creation with the world"}
                 </p>
               </div>
-              {!editId && (
+              {/* {!editId && (
                 <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
                   Slots Remaining: {2 - user.totalRecipesCreated}
                 </span>
-              )}
+              )} */}
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
