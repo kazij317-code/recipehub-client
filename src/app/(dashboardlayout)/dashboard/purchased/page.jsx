@@ -17,24 +17,29 @@ const PurchasedRecipesPage = async () => {
 
   const db = await getDb();
   
-  // Fetch all purchases for the logged-in user
+  // Fetch all recipe purchases for the logged-in user
   const purchases = await db
     .collection("purchases")
-    .find({ userEmail: user.email })
+    .find({ userEmail: user.email, paymentType: "recipe_purchase" })
     .sort({ createdAt: -1 })
     .toArray();
 
   let purchasedRecipesList = [];
 
   if (purchases.length > 0) {
-    // Collect all recipeIds
-    const recipeIds = purchases.map((p) => {
-      try {
-        return new ObjectId(p.recipeId);
-      } catch (e) {
-        return p.recipeId;
-      }
-    });
+    // Collect all recipeIds, filtering out any undefined/null ones
+    const recipeIds = purchases
+      .map((p) => p.recipeId)
+      .filter(Boolean)
+      .map((id) => {
+        try {
+          return new ObjectId(id);
+        } catch (e) {
+          return id;
+        }
+      });
+
+    const stringRecipeIds = purchases.map((p) => p.recipeId).filter(Boolean);
 
     // Query recipes details from database
     const recipes = await db
@@ -42,7 +47,7 @@ const PurchasedRecipesPage = async () => {
       .find({
         $or: [
           { _id: { $in: recipeIds.filter((id) => id instanceof ObjectId) } },
-          { id: { $in: purchases.map((p) => p.recipeId) } },
+          { id: { $in: stringRecipeIds } },
         ],
       })
       .toArray();
