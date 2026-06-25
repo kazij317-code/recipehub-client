@@ -2,19 +2,28 @@
 
 import { authClient } from "@/lib/auth-client";
 import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { BiEdit, BiUser } from "react-icons/bi";
 
 export function UpdateUserModal() {
+  const session = authClient.useSession();
+  const user = session.data?.user;
   const [loading, setLoading] = useState(false);
+
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setImage(user.image || "");
+    }
+  }, [user]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-    const name = e.target.name.value;
-    const image = e.target.image.value;
 
     try {
       await authClient.updateUser({
@@ -54,7 +63,7 @@ export function UpdateUserModal() {
                 Update User
               </Modal.Heading>
             </Modal.Header>
-
+ 
             <Modal.Body className="px-6 pb-6 pt-2">
               <Surface variant="default" className="bg-transparent shadow-none border-none p-0">
                 <form onSubmit={onSubmit} className="flex flex-col gap-5">
@@ -66,6 +75,8 @@ export function UpdateUserModal() {
                     </Label>
                     <Input 
                       placeholder="Enter your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="w-full bg-slate-50/50 dark:bg-[#0b0f17]/50 border border-slate-200 dark:border-slate-800 h-12 rounded-xl focus:border-blue-600 dark:focus:border-purple-500 transition-colors text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm font-medium px-4 outline-none"
                     />
                   </TextField>
@@ -77,6 +88,8 @@ export function UpdateUserModal() {
                     </Label>
                     <Input 
                       placeholder="https://example.com/avatar.jpg" 
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
                       className="w-full bg-slate-50/50 dark:bg-[#0b0f17]/50 border border-slate-200 dark:border-slate-800 h-12 rounded-xl focus:border-blue-600 dark:focus:border-purple-500 transition-colors text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm font-medium px-4 outline-none"
                     />
                   </TextField>
