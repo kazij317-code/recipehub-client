@@ -220,7 +220,7 @@ export default function AddRecipeForm({ user }) {
 
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
+
                 {/* Left Side: General Info & Image */}
                 <div className="space-y-6">
                   <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-zinc-800/80 pb-2">
@@ -281,7 +281,7 @@ export default function AddRecipeForm({ user }) {
                         <option value="Fastfood" className="dark:bg-zinc-900">Fastfood</option>
                         <option value="Noodles" className="dark:bg-zinc-900">Noodles</option>
                         <option value="Seafood" className="dark:bg-zinc-900">Seafood</option>
-                        <option value="Piza" className="dark:bg-zinc-900">Piza</option>
+                        <option value="Pizza" className="dark:bg-zinc-900">Pizza</option>
                         <option value="Pasta" className="dark:bg-zinc-900">Pasta</option>
                       </select>
                     </div>

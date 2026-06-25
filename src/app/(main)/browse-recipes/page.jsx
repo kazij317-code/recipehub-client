@@ -9,7 +9,7 @@ const AVAILABLE_CATEGORIES = [
   "Lunch",
   "Dinner",
   "Salad",
-  "Fast Food",
+  "Fastfood",
   "Noodles",
   "Seafood",
   "Pizza",
