@@ -2,7 +2,7 @@
 import { authClient } from "@/lib/auth-client";
 import { ArrowRightFromSquare } from "@gravity-ui/icons";
 import { Dropdown } from "@heroui/react";
-import { User, ChevronDown } from "lucide-react";
+import { User, ChevronDown, Users } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -14,6 +14,12 @@ const DropdownButton = ({ user }) => {
     await authClient.signOut();
     toast.success("logout successfully");
     window.location.href = "/";
+  };
+
+  const handleSwitchUser = async () => {
+    await authClient.signOut();
+    toast.success("logout successfully");
+    window.location.href = "/login";
   };
 
   return (
@@ -57,6 +63,13 @@ const DropdownButton = ({ user }) => {
           >
             <User size={16} className="text-gray-500" />
             Dashboard
+          </Dropdown.Item>
+          <Dropdown.Item
+            className="w-full flex items-center gap-2"
+            onAction={handleSwitchUser}
+          >
+            <Users size={16} className="text-gray-500" />
+            Switch User
           </Dropdown.Item>
           <Dropdown.Item
             className="w-full flex items-center gap-2 text-danger"
