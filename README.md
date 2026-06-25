@@ -266,7 +266,7 @@ JWT_SECRET=your_jwt_secret
 CLIENT_URL=http://localhost:3000
 ```
 
-> Never expose or commit your actual environment variables to GitHub.
+
 
 ---
 
