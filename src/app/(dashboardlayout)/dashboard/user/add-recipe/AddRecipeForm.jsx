@@ -178,12 +178,12 @@ export default function AddRecipeForm({ user }) {
   };
 
   return (
-    <div className="bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 py-10 px-4 transition-colors duration-300">
-      <div className="max-w-4xl mx-auto ">
+    <div className="bg-slate-50 dark:bg-zinc-950 text-slate-800 dark:text-zinc-100 py-10 px-4 transition-colors duration-300 min-h-screen">
+      <div className="max-w-5xl mx-auto">
         {hasReachedLimit ? (
           /* Premium Subscription Card (Shown when free limit is exceeded) */
-          <div className="border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-zinc-900 dark:to-zinc-900 dark:border-amber-500/20 p-8 rounded-2xl text-center max-w-xl mx-auto mt-12 shadow-xl">
-            <div className="w-16 h-16 bg-amber-100 dark:bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-600 mt-10">
+          <div className="border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-zinc-950 dark:to-zinc-900 dark:border-amber-500/20 p-8 rounded-3xl text-center max-w-xl mx-auto mt-12 shadow-xl">
+            <div className="w-16 h-16 bg-amber-100 dark:bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-600">
               <Crown className="w-8 h-8" />
             </div>
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
@@ -196,211 +196,243 @@ export default function AddRecipeForm({ user }) {
             <button
               type="button"
               onClick={() => router.push('/dashboard/upgrade')}
-              className="w-full py-3 bg-linear-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-xl transition shadow-md"
+              className="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-xl transition shadow-md cursor-pointer"
             >
               Become a Premium Member
             </button>
           </div>
         ) : (
-          /* ✅ Recipe Form */
-          <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 p-6 md:p-10 rounded-2xl shadow-md">
-            <div className="flex items-center justify-between mb-8 border-b border-slate-100 dark:border-zinc-800 pb-4">
+          /* ✅ Redesigned Recipe Form */
+          <div className="backdrop-blur-md bg-white/90 dark:bg-zinc-900/90 border border-slate-200/60 dark:border-zinc-800/60 p-6 md:p-10 rounded-3xl shadow-xl transition-all duration-300">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 border-b border-slate-100 dark:border-zinc-800/80 pb-6 gap-4">
               <div>
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                  {editId ? "Edit " : "Add "}
-                  <span className="bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
-                    {editId ? "Recipe" : "New Recipe"}
-                  </span>{" "}
+                <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                  {editId ? "Edit " : "Create "}
+                  <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                    {editId ? "Recipe 🍳" : "New Recipe 🍲"}
+                  </span>
                 </h1>
-                <p className="text-sm text-slate-500 dark:text-zinc-400">
-                  {editId ? "Update your recipe details below" : "Share your culinary creation with the world"}
+                <p className="text-sm text-slate-500 dark:text-zinc-400 mt-1">
+                  {editId ? "Refine your recipe details and update your listing" : "Share your culinary masterpieces with our global food community"}
                 </p>
               </div>
-              {/* {!editId && (
-                <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400">
-                  Slots Remaining: {2 - user.totalRecipesCreated}
-                </span>
-              )} */}
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Recipe Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={recipeName}
-                    onChange={(e) => setRecipeName(e.target.value)}
-                    className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-700 bg-transparent outline-none focus:border-blue-500 text-slate-900 dark:text-white"
-                    placeholder="e.g., Kacchi Biryani"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Cuisine Type
-                  </label>
-                  <select
-                    required
-                    value={cuisineType}
-                    onChange={(e) => setCuisineType(e.target.value)}
-                    className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white outline-none focus:border-blue-500"
-                  >
-                    <option value="">Select cuisine...</option>
-                    {cuisineOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                {/* Left Side: General Info & Image */}
+                <div className="space-y-6">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-zinc-800/80 pb-2">
+                    General Information
+                  </h3>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Recipe Image
-                </label>
-                <div className="border-2 border-dashed border-slate-200 dark:border-zinc-700 rounded-xl p-4 text-center cursor-pointer hover:bg-slate-50 dark:hover:bg-zinc-800/30 relative">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                    disabled={imageUploading}
-                  />
-                  {imageUploading ? (
-                    <div className="py-4 flex flex-col items-center justify-center gap-2">
-                      <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
-                      <p className="text-xs text-slate-500 dark:text-zinc-400">
-                        Uploading to ImgBB...
-                      </p>
-                    </div>
-                  ) : recipeImage ? (
-                    <div className="flex items-center justify-between bg-slate-100 dark:bg-zinc-800 p-2 rounded-lg">
-                      <img
-                        src={recipeImage}
-                        alt="Recipe"
-                        className="w-12 h-12 object-cover rounded"
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
+                        Recipe Name
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={recipeName}
+                        onChange={(e) => setRecipeName(e.target.value)}
+                        className="w-full px-4 h-12 rounded-2xl border border-slate-200 dark:border-zinc-700 bg-slate-50/50 dark:bg-zinc-800/30 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 text-slate-900 dark:text-white transition-all duration-200 placeholder-slate-400 dark:placeholder-slate-500"
+                        placeholder="e.g., Kacchi Biryani"
                       />
-                      <span className="text-xs truncate max-w-xs px-2 text-slate-600 dark:text-zinc-300">
-                        {recipeImage}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setRecipeImage("")}
-                        className="text-red-500 p-1 hover:bg-red-50 dark:hover:bg-red-500/10 rounded"
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
+                        Cuisine Type
+                      </label>
+                      <select
+                        required
+                        value={cuisineType}
+                        onChange={(e) => setCuisineType(e.target.value)}
+                        className="w-full px-4 h-12 rounded-2xl border border-slate-200 dark:border-zinc-700 bg-slate-50/50 dark:bg-zinc-800/30 text-slate-900 dark:text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200 cursor-pointer"
                       >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                        <option value="" className="dark:bg-zinc-900">Select cuisine...</option>
+                        {cuisineOptions.map((option) => (
+                          <option key={option} value={option} className="dark:bg-zinc-900">
+                            {option}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                  ) : (
-                    <div className="py-4">
-                      <Upload className="w-6 h-6 mx-auto text-slate-400 mb-1" />
-                      <p className="text-xs text-slate-500 dark:text-zinc-400">
-                        Click or Drag to upload image
-                      </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
+                        Category
+                      </label>
+                      <select
+                        required
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="w-full px-4 h-12 rounded-2xl border border-slate-200 dark:border-zinc-700 bg-slate-50/50 dark:bg-zinc-800/30 text-slate-900 dark:text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200 cursor-pointer"
+                      >
+                        <option value="" className="dark:bg-zinc-900">Select Category</option>
+                        <option value="Breakfast" className="dark:bg-zinc-900">Breakfast</option>
+                        <option value="Lunch" className="dark:bg-zinc-900">Lunch</option>
+                        <option value="Dinner" className="dark:bg-zinc-900">Dinner</option>
+                        <option value="Dessert" className="dark:bg-zinc-900">Dessert</option>
+                        <option value="Salad" className="dark:bg-zinc-900">Salad</option>
+                        <option value="Fastfood" className="dark:bg-zinc-900">Fastfood</option>
+                        <option value="Noodles" className="dark:bg-zinc-900">Noodles</option>
+                        <option value="Seafood" className="dark:bg-zinc-900">Seafood</option>
+                        <option value="Piza" className="dark:bg-zinc-900">Piza</option>
+                        <option value="Pasta" className="dark:bg-zinc-900">Pasta</option>
+                      </select>
                     </div>
-                  )}
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
+                        Difficulty
+                      </label>
+                      <select
+                        value={difficulty}
+                        onChange={(e) => setDifficulty(e.target.value)}
+                        className="w-full px-4 h-12 rounded-2xl border border-slate-200 dark:border-zinc-700 bg-slate-50/50 dark:bg-zinc-800/30 text-slate-900 dark:text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-200 cursor-pointer"
+                      >
+                        <option value="Easy" className="dark:bg-zinc-900">Easy</option>
+                        <option value="Medium" className="dark:bg-zinc-900">Medium</option>
+                        <option value="Hard" className="dark:bg-zinc-900">Hard</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
+                        Prep Time (mins)
+                      </label>
+                      <input
+                        type="number"
+                        required
+                        value={prepTime}
+                        onChange={(e) => setPrepTime(e.target.value)}
+                        className="w-full px-4 h-12 rounded-2xl border border-slate-200 dark:border-zinc-700 bg-slate-50/50 dark:bg-zinc-800/30 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 text-slate-900 dark:text-white transition-all duration-200 placeholder-slate-400 dark:placeholder-slate-500"
+                        placeholder="45"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
+                      Recipe Image
+                    </label>
+                    <div className="border-2 border-dashed border-slate-200 dark:border-zinc-700 hover:border-cyan-500 dark:hover:border-cyan-500/60 rounded-2xl p-6 text-center cursor-pointer hover:bg-slate-50/50 dark:hover:bg-zinc-800/20 transition-all duration-300 relative group flex flex-col justify-center min-h-[140px]">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                        disabled={imageUploading}
+                      />
+                      {imageUploading ? (
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
+                          <p className="text-xs font-semibold text-slate-500 dark:text-zinc-400">
+                            Uploading to ImgBB...
+                          </p>
+                        </div>
+                      ) : recipeImage ? (
+                        <div className="flex items-center justify-between bg-slate-100 dark:bg-zinc-850 p-2.5 rounded-xl border border-slate-200/50 dark:border-zinc-700/50">
+                          <div className="flex items-center gap-3 min-w-0">
+                            <img
+                              src={recipeImage}
+                              alt="Recipe Preview"
+                              className="w-14 h-14 object-cover rounded-lg border border-slate-200 dark:border-zinc-700"
+                            />
+                            <span className="text-xs truncate max-w-[150px] md:max-w-[200px] text-slate-600 dark:text-zinc-300 font-medium">
+                              {recipeImage}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setRecipeImage("")}
+                            className="text-red-500 p-2 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors z-20 relative cursor-pointer"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                            <Upload className="w-5 h-5 text-slate-500 dark:text-zinc-400" />
+                          </div>
+                          <div>
+                            <p className="text-xs font-bold text-slate-700 dark:text-zinc-300">
+                              Upload a cover image
+                            </p>
+                            <p className="text-[10px] text-slate-400 dark:text-zinc-500 mt-1">
+                              Drag & drop or click to upload
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
+
+                {/* Right Side: Ingredients & Instructions */}
+                <div className="space-y-6">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-zinc-800/80 pb-2">
+                    Ingredients & Steps
+                  </h3>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
+                      Ingredients (one per line)
+                    </label>
+                    <textarea
+                      required
+                      value={ingredients}
+                      onChange={(e) => setIngredients(e.target.value)}
+                      rows={5}
+                      className="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-zinc-700 bg-slate-50/50 dark:bg-zinc-800/30 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 text-slate-900 dark:text-white transition-all duration-200 text-sm font-medium resize-none"
+                      placeholder="2 cups pasta&#10;1 cup heavy cream&#10;3 cloves garlic"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-zinc-400 mb-2">
+                      Instructions Steps (one step per line)
+                    </label>
+                    <textarea
+                      required
+                      value={instructions}
+                      onChange={(e) => setInstructions(e.target.value)}
+                      rows={7}
+                      className="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-zinc-700 bg-slate-50/50 dark:bg-zinc-800/30 outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 text-slate-900 dark:text-white transition-all duration-200 text-sm font-medium resize-none"
+                      placeholder="Boil water and cook pasta until al dente.&#10;Sauté garlic in butter until fragrant.&#10;Add cream and bring to a simmer."
+                    />
+                  </div>
+                </div>
+
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Category
-                  </label>
-                  <select
-                    required
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white outline-none focus:border-blue-500"
-                  >
-                    <option value="">Select Category</option>
-                    <option value="Breakfast">Breakfast</option>
-                    <option value="Lunch">Lunch</option>
-                    <option value="Dinner">Dinner</option>
-                    <option value="Dessert">Dessert</option>
-                    <option value="Salad">Salad</option>
-                    <option value="Fastfood">Fastfood</option>
-                    <option value="Noodles">Noodles</option>
-                    <option value="Seafood">Seafood</option>
-                    <option value="Piza">Piza</option>
-                    <option value="Pasta">Pasta</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Difficulty
-                  </label>
-                  <select
-                    value={difficulty}
-                    onChange={(e) => setDifficulty(e.target.value)}
-                    className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-slate-900 dark:text-white outline-none focus:border-blue-500"
-                  >
-                    <option value="Easy">Easy</option>
-                    <option value="Medium">Medium</option>
-                    <option value="Hard">Hard</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Prep Time (mins)
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    value={prepTime}
-                    onChange={(e) => setPrepTime(e.target.value)}
-                    className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-zinc-700 bg-transparent outline-none focus:border-blue-500 text-slate-900 dark:text-white"
-                    placeholder="45"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Ingredients * (one per line)
-                </label>
-                <textarea
-                  required
-                  value={ingredients}
-                  onChange={(e) => setIngredients(e.target.value)}
-                  rows={6}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-transparent outline-none focus:border-blue-500 text-slate-900 dark:text-white"
-                  placeholder="2 cups pasta\n1 cup heavy cream\n3 cloves garlic"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Instructions Steps * (one step per line)
-                </label>
-                <textarea
-                  required
-                  value={instructions}
-                  onChange={(e) => setInstructions(e.target.value)}
-                  rows={8}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-transparent outline-none focus:border-blue-500 text-slate-900 dark:text-white"
-                  placeholder="Boil water and cook pasta until al dente.\nSauté garlic in butter until fragrant.\nAdd cream and bring to a simmer."
-                />
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              {/* Bottom Actions Row */}
+              <div className="flex items-center justify-between border-t border-slate-100 dark:border-zinc-800/80 pt-6 mt-8">
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="w-full sm:w-auto px-5 py-3 border border-slate-300 dark:border-zinc-700 rounded-xl text-slate-700 dark:text-zinc-200 bg-white dark:bg-zinc-900 hover:bg-slate-50 dark:hover:bg-zinc-800 transition"
+                  className="px-6 h-12 font-bold rounded-2xl border border-slate-200 dark:border-zinc-700 text-slate-700 dark:text-zinc-300 hover:bg-slate-50 dark:hover:bg-zinc-800 transition cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading || imageUploading}
-                  className="w-full sm:w-auto px-5 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold rounded-xl transition disabled:opacity-50 shadow-md"
+                  className="px-8 h-12 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 hover:from-cyan-600 hover:to-indigo-700 text-white font-bold rounded-2xl transition shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 disabled:opacity-50 cursor-pointer active:scale-[0.99] flex items-center justify-center"
                 >
-                  {loading ? "Saving..." : editId ? "Update Recipe" : "Submit Recipe"}
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Saving...</span>
+                    </div>
+                  ) : editId ? (
+                    "Update Recipe"
+                  ) : (
+                    "Submit Recipe"
+                  )}
                 </button>
               </div>
             </form>
